@@ -1,0 +1,12 @@
+*.DS_Store
+build
+.gradle
+
+## IntelliJ IDEA
+.idea
+
+## File-based project format:
+.ipr
+.iws
+.iml
+*.iml
