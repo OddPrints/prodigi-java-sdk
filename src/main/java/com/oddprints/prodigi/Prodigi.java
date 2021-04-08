@@ -1,6 +1,6 @@
 package com.oddprints.prodigi;
 
-import com.oddprints.prodigi.pojos.CreateOrderResponse;
+import com.oddprints.prodigi.pojos.OrderResponse;
 import com.oddprints.prodigi.pojos.Order;
 import io.netty.handler.logging.LogLevel;
 import org.slf4j.Logger;
@@ -11,6 +11,7 @@ import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
+import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 import reactor.netty.transport.logging.AdvancedByteBufFormat;
 
@@ -36,7 +37,7 @@ public class Prodigi {
                 .build();
     }
 
-    public CreateOrderResponse createOrder(Order order) {
+    public OrderResponse createOrder(Order order) {
         WebClient.UriSpec<WebClient.RequestBodySpec> uriSpec = webClient.post();
         WebClient.RequestBodySpec bodySpec = uriSpec.uri(
                 uriBuilder -> uriBuilder.pathSegment("Orders").build());
@@ -44,7 +45,21 @@ public class Prodigi {
 
         try {
             return headersSpec.retrieve()
-                    .bodyToMono(CreateOrderResponse.class).block();
+                    .bodyToMono(OrderResponse.class).block();
+        } catch (WebClientResponseException e) {
+            log.error("response = " + e.getResponseBodyAsString());
+            return null;
+        }
+    }
+
+    public OrderResponse getOrder(String id) {
+        Mono<OrderResponse> orderMono = webClient.get()
+                .uri("/Orders/{id}", id)
+                .retrieve()
+                .bodyToMono(OrderResponse.class);
+
+        try {
+            return orderMono.block();
         } catch (WebClientResponseException e) {
             log.error("response = " + e.getResponseBodyAsString());
             return null;

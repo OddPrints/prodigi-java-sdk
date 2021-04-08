@@ -5,10 +5,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CreateOrderResponse {
+public class OrderResponse {
     private Order order;
+    private String outcome;
 
-    public CreateOrderResponse() {
+    public OrderResponse() {
     }
 
     public Order getOrder() {
@@ -17,6 +18,14 @@ public class CreateOrderResponse {
 
     public void setOrder(Order order) {
         this.order = order;
+    }
+
+    public String getOutcome() {
+        return outcome;
+    }
+
+    public void setOutcome(String outcome) {
+        this.outcome = outcome;
     }
 
     @Override

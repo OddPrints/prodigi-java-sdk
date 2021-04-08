@@ -9,6 +9,8 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Order {
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String id;
     private String shippingMethod = "Overnight";
     private Recipient recipient = new Recipient();
     private List<Item> items;
@@ -17,6 +19,15 @@ public class Order {
     public Order() {
         items = new ArrayList<>();
         items.add(new Item());
+    }
+
+    @JsonIgnore // don't serialise id...
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getShippingMethod() {
