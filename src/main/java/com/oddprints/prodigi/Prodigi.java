@@ -20,6 +20,9 @@ public class Prodigi {
     private WebClient webClient;
 
     public Prodigi(final String apiKey) {
+        if (apiKey == null || apiKey.trim().isEmpty()) {
+            throw new IllegalArgumentException("No api key supplied. Try adding PRODIGI_API_KEY_SANDBOX to environment");
+        }
         httpClient = HttpClient
                 .create()
                 .wiretap(this.getClass().getCanonicalName(),
