@@ -91,4 +91,8 @@ public class Order {
     public enum ShippingMethod {
         Budget, Standard, Express, Overnight;
     }
+
+    public enum QualityLevel {
+        Pro, Standard;
+    }
 }

@@ -1,15 +1,13 @@
 package com.oddprints.prodigi;
 
 import com.oddprints.prodigi.pojos.*;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.File;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.net.MalformedURLException;
 
+import static com.oddprints.prodigi.pojos.CountryCode.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -24,9 +22,27 @@ class ProdigiTest {
         prodigi = new Prodigi(apiKey);
     }
 
+    private Recipient dummyRecipient() {
+        return dummyRecipient(GB);
+    }
+
+    private Recipient dummyRecipient(CountryCode countryCode) {
+        return new Recipient("Bob", new Address("line1", "line2", "90210", countryCode, "Bristol"));
+    }
+
+    private Order dummyOrder() {
+        return dummyOrder(Order.ShippingMethod.Standard, dummyRecipient());
+    }
+
+    private Order dummyOrder(Order.ShippingMethod shippingMethod, Recipient recipient) {
+        return new Order.Builder(shippingMethod, recipient)
+                .addImage("https://www.oddprints.com/images/header-dogcat.jpg", "GLOBAL-PHO-4x6", 1)
+                .build();
+    }
+
     @Test
     void can_create_order() {
-        Order o = testOrder();
+        Order o = dummyOrder();
         Prodigi p = new Prodigi(apiKey);
         OrderResponse response = p.createOrder(o);
         assertEquals(Status.Stage.InProgress, response.getOrder().getStatus().getStage());
@@ -44,7 +60,7 @@ class ProdigiTest {
 
     @Test
     public void can_create_and_fetch_order_id() {
-        Order order = testOrder();
+        Order order = dummyOrder();
         order.getRecipient().setName("bloggs");
         OrderResponse response = prodigi.createOrder(order);
 
@@ -67,7 +83,7 @@ class ProdigiTest {
 
     @Test
     public void can_find_most_recent_order_by_fetching_1_order() {
-        Order order = testOrder();
+        Order order = dummyOrder();
         OrderResponse response = prodigi.createOrder(order);
         String id = response.getOrder().getId();
 
@@ -78,20 +94,14 @@ class ProdigiTest {
 
     @Test
     public void can_create_order_and_get_status() {
-        Order order = testOrder();
+        Order order = dummyOrder();
         OrderResponse response = prodigi.createOrder(order);
         assertEquals(Status.Stage.InProgress, response.getOrder().getStatus().getStage());
     }
 
-    private Order testOrder() {
-        return new Order.Builder(Order.ShippingMethod.Standard, new Recipient())
-                .addImage("https://www.oddprints.com/images/header-dogcat.jpg", "GLOBAL-PHO-4x6", 1)
-                .build();
-    }
-
     @Test
     public void can_create_order_with_photos() {
-        Order order = new Order.Builder(Order.ShippingMethod.Standard, new Recipient())
+        Order order = new Order.Builder(Order.ShippingMethod.Standard, dummyRecipient())
                 .addImage("https://www.oddprints.com/images/header-dogcat.jpg", "GLOBAL-PHO-4x6", 1)
                 .addImage("https://www.oddprints.com/images/header-dogcat.jpg", "GLOBAL-PHO-4x6-PRO", 2)
                 .build();

@@ -2,14 +2,17 @@ package com.oddprints.prodigi.pojos;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import java.util.List;
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Recipient {
-    private String name = "bob";
-    private Address address = new Address();
+    private String name;
+    private Address address;
 
-    public Recipient() {
+    public Recipient(String name, Address address) {
+        this.name = name;
+        this.address = address;
+    }
+
+    private Recipient() {
     }
 
     public String getName() {

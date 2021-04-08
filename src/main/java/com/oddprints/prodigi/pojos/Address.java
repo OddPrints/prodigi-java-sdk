@@ -4,13 +4,21 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Address {
-    private String line1 = "line1";
-    private String line2 = "line2";
-    private String postalOrZipCode = "-";
-    private String countryCode = "GB";
-    private String townOrCity = "Bristol";
+    private String line1;
+    private String line2;
+    private String postalOrZipCode;
+    private CountryCode countryCode;
+    private String townOrCity;
 
-    public Address() {
+    public Address(String line1, String line2, String postalOrZipCode, CountryCode countryCode, String townOrCity) {
+        this.line1 = line1;
+        this.line2 = line2;
+        this.postalOrZipCode = postalOrZipCode;
+        this.countryCode = countryCode;
+        this.townOrCity = townOrCity;
+    }
+
+    private Address() {
     }
 
     public String getLine1() {
@@ -37,11 +45,11 @@ public class Address {
         this.postalOrZipCode = postalOrZipCode;
     }
 
-    public String getCountryCode() {
+    public CountryCode getCountryCode() {
         return countryCode;
     }
 
-    public void setCountryCode(String countryCode) {
+    public void setCountryCode(CountryCode countryCode) {
         this.countryCode = countryCode;
     }
 
