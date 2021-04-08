@@ -109,4 +109,14 @@ class ProdigiTest {
         assertEquals(Status.Stage.InProgress, response.getOrder().getStatus().getStage());
     }
 
+    @Test
+    public void can_create_order_with_phone_number() {
+        Recipient recipient = dummyRecipient();
+        recipient.setPhoneNumber("123456");
+        Order order = new Order.Builder(Order.ShippingMethod.Standard, recipient)
+                .addImage("https://www.oddprints.com/images/header-dogcat.jpg", "GLOBAL-PHO-4x6", 1)
+                .build();
+        OrderResponse response = prodigi.createOrder(order);
+        assertEquals("123456", response.getOrder().getRecipient().getPhoneNumber());
+    }
 }

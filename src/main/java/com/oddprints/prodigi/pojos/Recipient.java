@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class Recipient {
     private String name;
     private Address address;
+    private String phoneNumber;
 
     public Recipient(String name, Address address) {
         this.name = name;
@@ -29,5 +30,13 @@ public class Recipient {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }
