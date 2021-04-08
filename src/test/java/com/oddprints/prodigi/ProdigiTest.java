@@ -1,11 +1,13 @@
 package com.oddprints.prodigi;
 
 import com.oddprints.prodigi.pojos.*;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.event.annotation.AfterTestClass;
 
-import java.net.MalformedURLException;
+import java.util.List;
 
 import static com.oddprints.prodigi.pojos.CountryCode.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,6 +22,16 @@ class ProdigiTest {
     @BeforeEach
     public void setup() {
         prodigi = new Prodigi(apiKey);
+    }
+
+    @AfterAll
+    public static void cleanup() {
+        String apiKey = System.getenv("PRODIGI_API_KEY_SANDBOX");
+        Prodigi prodigi = new Prodigi(apiKey);
+        List<Order> fetchedOrders = prodigi.getOrders(100, 0).getOrders();
+        for (Order o : fetchedOrders) {
+            prodigi.cancelOrder(o.getId());
+        }
     }
 
     private Recipient dummyRecipient() {
@@ -118,5 +130,14 @@ class ProdigiTest {
                 .build();
         OrderResponse response = prodigi.createOrder(order);
         assertEquals("123456", response.getOrder().getRecipient().getPhoneNumber());
+    }
+
+    @Test
+    public void can_cancel_order() {
+        Order order = dummyOrder();
+
+        OrderResponse response = prodigi.createOrder(order);
+        boolean cancelled = prodigi.cancelOrder(response.getOrder().getId());
+        assertEquals(true, cancelled);
     }
 }

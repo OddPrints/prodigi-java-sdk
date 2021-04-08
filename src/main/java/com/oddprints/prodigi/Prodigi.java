@@ -41,7 +41,7 @@ public class Prodigi {
     public OrderResponse createOrder(Order order) {
         WebClient.UriSpec<WebClient.RequestBodySpec> uriSpec = webClient.post();
         WebClient.RequestBodySpec bodySpec = uriSpec.uri(
-                uriBuilder -> uriBuilder.pathSegment("Orders").build());
+                uriBuilder -> uriBuilder.pathSegment("orders").build());
         WebClient.RequestHeadersSpec<?> headersSpec = bodySpec.body(BodyInserters.fromValue(order));
 
         try {
@@ -55,7 +55,7 @@ public class Prodigi {
 
     public OrderResponse getOrder(String id) {
         Mono<OrderResponse> orderMono = webClient.get()
-                .uri("/Orders/{id}", id)
+                .uri("/orders/{id}", id)
                 .retrieve()
                 .bodyToMono(OrderResponse.class);
 
@@ -69,7 +69,7 @@ public class Prodigi {
 
     public OrdersResponse getOrders(int top, int skip) {
         Mono<OrdersResponse> orderMono = webClient.get()
-                .uri("/Orders")
+                .uri("/orders")
                 .attribute("top", top)
                 .attribute("skip", skip)
                 .retrieve()
@@ -80,6 +80,20 @@ public class Prodigi {
         } catch (WebClientResponseException e) {
             log.error("response = " + e.getResponseBodyAsString());
             throw new ProdigiError(e.getResponseBodyAsString(), e.getRawStatusCode());
+        }
+    }
+
+    public boolean cancelOrder(String id) {
+        Mono<OrderResponse> orderMono = webClient.post()
+                .uri("/orders/{id}/actions/cancel", id)
+                .retrieve()
+                .bodyToMono(OrderResponse.class);
+
+        try {
+            return orderMono.block().getOutcome().equalsIgnoreCase("cancelled");
+        } catch (WebClientResponseException e) {
+            log.error("response = " + e.getResponseBodyAsString());
+            return false;
         }
     }
 }
