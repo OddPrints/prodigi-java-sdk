@@ -62,7 +62,7 @@ public class Prodigi {
             return orderMono.block();
         } catch (WebClientResponseException e) {
             log.error("response = " + e.getResponseBodyAsString());
-            return null;
+            throw new ProdigiError(e.getResponseBodyAsString(), e.getRawStatusCode());
         }
     }
 }

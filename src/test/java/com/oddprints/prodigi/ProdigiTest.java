@@ -51,4 +51,14 @@ class ProdigiTest {
         assertEquals("bloggs", fetchedOrder.getRecipient().getName());
         assertEquals(id, fetchedOrder.getId());
     }
+
+    @Test
+    public void cannot_fetch_invalid_order() {
+        try {
+            prodigi.getOrder("blah").getOrder();
+            fail("should have thrown");
+        } catch (ProdigiError e) {
+            assertEquals(400, e.getCode());
+        }
+    }
 }
