@@ -61,4 +61,15 @@ class ProdigiTest {
             assertEquals(400, e.getCode());
         }
     }
+
+    @Test
+    public void can_find_most_recent_order_by_fetching_1_order() {
+        Order o = new Order();
+        OrderResponse response = prodigi.createOrder(o);
+        String id = response.getOrder().getId();
+
+        Order fetched = prodigi.getOrders(1, 0).getOrders().get(0);
+
+        assertEquals(id, fetched.getId());
+    }
 }

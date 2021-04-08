@@ -2,6 +2,7 @@ package com.oddprints.prodigi;
 
 import com.oddprints.prodigi.pojos.OrderResponse;
 import com.oddprints.prodigi.pojos.Order;
+import com.oddprints.prodigi.pojos.OrdersResponse;
 import io.netty.handler.logging.LogLevel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,6 +58,22 @@ public class Prodigi {
                 .uri("/Orders/{id}", id)
                 .retrieve()
                 .bodyToMono(OrderResponse.class);
+
+        try {
+            return orderMono.block();
+        } catch (WebClientResponseException e) {
+            log.error("response = " + e.getResponseBodyAsString());
+            throw new ProdigiError(e.getResponseBodyAsString(), e.getRawStatusCode());
+        }
+    }
+
+    public OrdersResponse getOrders(int top, int skip) {
+        Mono<OrdersResponse> orderMono = webClient.get()
+                .uri("/Orders")
+                .attribute("top", top)
+                .attribute("skip", skip)
+                .retrieve()
+                .bodyToMono(OrdersResponse.class);
 
         try {
             return orderMono.block();
