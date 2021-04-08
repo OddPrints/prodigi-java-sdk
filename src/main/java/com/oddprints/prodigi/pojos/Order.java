@@ -11,14 +11,38 @@ import java.util.List;
 public class Order {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String id;
-    private String shippingMethod = "Overnight";
-    private Recipient recipient = new Recipient();
+    private ShippingMethod shippingMethod;
+    private Recipient recipient;
     private List<Item> items;
     private Status status;
 
-    public Order() {
-        items = new ArrayList<>();
-        items.add(new Item());
+    public static class Builder {
+        private List<Item> builderItems;
+        private ShippingMethod builderShippingMethod;
+        private Recipient builderRecipient;
+
+        public Builder(ShippingMethod shippingMethod, Recipient recipient) {
+            builderItems = new ArrayList<>();
+            builderShippingMethod = shippingMethod;
+            builderRecipient = recipient;
+        }
+
+        public Builder addImage(String url, String sku, int copies) {
+            Item item = new Item.Builder(sku, copies).addAsset(url).build();
+            builderItems.add(item);
+            return this;
+        }
+
+        public Order build() {
+            Order order = new Order();
+            order.setItems(builderItems);
+            order.setShippingMethod(builderShippingMethod);
+            order.setRecipient(builderRecipient);
+            return order;
+        }
+    }
+
+    private Order() {
     }
 
     @JsonIgnore // don't serialise id...
@@ -30,11 +54,11 @@ public class Order {
         this.id = id;
     }
 
-    public String getShippingMethod() {
+    public ShippingMethod getShippingMethod() {
         return shippingMethod;
     }
 
-    public void setShippingMethod(String shippingMethod) {
+    public void setShippingMethod(ShippingMethod shippingMethod) {
         this.shippingMethod = shippingMethod;
     }
 
@@ -62,5 +86,9 @@ public class Order {
     @JsonProperty // ...but allow it to be read
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public enum ShippingMethod {
+        Budget, Standard, Express, Overnight;
     }
 }

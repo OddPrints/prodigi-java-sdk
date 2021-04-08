@@ -15,11 +15,36 @@ public class Item {
     private List<Asset> assets;
     private Map<String, String> attributes;
 
-    public Item() {
-        assets = new ArrayList<>();
-        assets.add(new Asset());
-        attributes = new HashMap<>();
-        attributes.put("finish", "lustre");
+    public static class Builder {
+        private List<Asset> builderAssets;
+        private String builderSku;
+        private Map<String, String> builderAttributes = new HashMap<>();
+        private int builderCopies;
+
+        public Builder(String sku, int copies) {
+            this.builderAssets = new ArrayList<>();
+            this.builderSku = sku;
+            builderAttributes.put("finish", "lustre"); // default
+            builderCopies = copies;
+        }
+
+        public Builder addAsset(String url) {
+            Asset asset = new Asset.Builder(url).build();
+            builderAssets.add(asset);
+            return this;
+        }
+
+        public Item build() {
+            Item item = new Item();
+            item.setAssets(builderAssets);
+            item.setSku(builderSku);
+            item.setAttributes(builderAttributes);
+            item.setCopies(builderCopies);
+            return item;
+        }
+    }
+
+    private Item() {
     }
 
     public String getSku() {
