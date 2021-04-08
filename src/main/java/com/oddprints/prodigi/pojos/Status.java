@@ -5,15 +5,15 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Status {
-    private String stage;
+    private Stage stage;
     private Details details;
     private List<Issue> issues;
 
-    public String getStage() {
+    public Stage getStage() {
         return stage;
     }
 
-    public void setStage(String stage) {
+    public void setStage(Stage stage) {
         this.stage = stage;
     }
 
@@ -31,5 +31,9 @@ public class Status {
 
     public void setIssues(List<Issue> issues) {
         this.issues = issues;
+    }
+
+    public enum Stage {
+        InProgress, Complete, Cancelled
     }
 }

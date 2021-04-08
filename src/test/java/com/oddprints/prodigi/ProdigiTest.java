@@ -2,6 +2,7 @@ package com.oddprints.prodigi;
 
 import com.oddprints.prodigi.pojos.OrderResponse;
 import com.oddprints.prodigi.pojos.Order;
+import com.oddprints.prodigi.pojos.Status;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +27,7 @@ class ProdigiTest {
         Order o = new Order();
         Prodigi p = new Prodigi(apiKey);
         OrderResponse response = p.createOrder(o);
-        assertEquals("InProgress", response.getOrder().getStatus().getStage());
+        assertEquals(Status.Stage.InProgress, response.getOrder().getStatus().getStage());
     }
 
     @Test
@@ -41,9 +42,9 @@ class ProdigiTest {
 
     @Test
     public void can_create_and_fetch_order_id() {
-        Order o = new Order();
-        o.getRecipient().setName("bloggs");
-        OrderResponse response = prodigi.createOrder(o);
+        Order order = new Order();
+        order.getRecipient().setName("bloggs");
+        OrderResponse response = prodigi.createOrder(order);
 
         String id = response.getOrder().getId();
         Order fetchedOrder = prodigi.getOrder(id).getOrder();
@@ -64,12 +65,19 @@ class ProdigiTest {
 
     @Test
     public void can_find_most_recent_order_by_fetching_1_order() {
-        Order o = new Order();
-        OrderResponse response = prodigi.createOrder(o);
+        Order order = new Order();
+        OrderResponse response = prodigi.createOrder(order);
         String id = response.getOrder().getId();
 
         Order fetched = prodigi.getOrders(1, 0).getOrders().get(0);
 
         assertEquals(id, fetched.getId());
+    }
+
+    @Test
+    public void can_create_order_and_get_status() {
+        Order order = new Order();
+        OrderResponse response = prodigi.createOrder(order);
+        assertEquals(Status.Stage.InProgress, response.getOrder().getStatus().getStage());
     }
 }
