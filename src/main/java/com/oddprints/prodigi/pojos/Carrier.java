@@ -7,6 +7,8 @@ public class Carrier {
     private String name;
     private String service;
 
+    private Carrier() {}
+
     public String getName() {
         return name;
     }

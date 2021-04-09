@@ -12,6 +12,8 @@ public class Shipment {
     private LocalDateTime dispatchDate;
     private List<ShipmentItem> items;
 
+    private Shipment() {}
+
     public String getId() {
         return id;
     }

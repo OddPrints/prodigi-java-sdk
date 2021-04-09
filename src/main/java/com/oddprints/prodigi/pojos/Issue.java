@@ -8,6 +8,8 @@ public class Issue {
     private String errorCode;
     private String description;
 
+    private Issue() {}
+
     public String getObjectId() {
         return objectId;
     }

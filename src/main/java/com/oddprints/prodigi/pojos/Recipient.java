@@ -7,10 +7,17 @@ public class Recipient {
     private String name;
     private Address address;
     private String phoneNumber;
+    private String email;
 
     public Recipient(String name, Address address) {
+        this(name, address, null, null);
+    }
+
+    public Recipient(String name, Address address, String phoneNumber, String email) {
         this.name = name;
         this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
     }
 
     private Recipient() {}
@@ -37,5 +44,13 @@ public class Recipient {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

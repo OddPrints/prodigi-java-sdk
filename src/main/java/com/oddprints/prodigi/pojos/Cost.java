@@ -7,6 +7,8 @@ public class Cost {
     private String amount;
     private String currency;
 
+    private Cost() {}
+
     public String getAmount() {
         return amount;
     }

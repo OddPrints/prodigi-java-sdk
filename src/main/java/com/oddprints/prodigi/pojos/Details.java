@@ -10,6 +10,8 @@ public class Details {
     private String inProduction;
     private String shipping;
 
+    private Details() {}
+
     public String getDownloadAssets() {
         return downloadAssets;
     }

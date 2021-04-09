@@ -7,6 +7,8 @@ public class Tracking {
     private String number;
     private String url;
 
+    private Tracking() {}
+
     public String getNumber() {
         return number;
     }

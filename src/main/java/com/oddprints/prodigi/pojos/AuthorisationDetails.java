@@ -7,6 +7,8 @@ public class AuthorisationDetails {
     private String authorisationUrl;
     private Cost paymentDetails;
 
+    private AuthorisationDetails() {}
+
     public String getAuthorisationUrl() {
         return authorisationUrl;
     }

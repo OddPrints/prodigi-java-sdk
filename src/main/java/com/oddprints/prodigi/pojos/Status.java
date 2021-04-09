@@ -9,6 +9,8 @@ public class Status {
     private Details details;
     private List<Issue> issues;
 
+    private Status() {}
+
     public Stage getStage() {
         return stage;
     }
