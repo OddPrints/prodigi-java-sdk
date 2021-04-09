@@ -7,8 +7,8 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Shipment {
     private String id;
-    private String carrier;
-    private String tracking;
+    private Carrier carrier;
+    private Tracking tracking;
     private LocalDateTime dispatchDate;
     private List<ShipmentItem> items;
 
@@ -20,19 +20,19 @@ public class Shipment {
         this.id = id;
     }
 
-    public String getCarrier() {
+    public Carrier getCarrier() {
         return carrier;
     }
 
-    public void setCarrier(String carrier) {
+    public void setCarrier(Carrier carrier) {
         this.carrier = carrier;
     }
 
-    public String getTracking() {
+    public Tracking getTracking() {
         return tracking;
     }
 
-    public void setTracking(String tracking) {
+    public void setTracking(Tracking tracking) {
         this.tracking = tracking;
     }
 

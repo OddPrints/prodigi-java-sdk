@@ -3,6 +3,7 @@ package com.oddprints.prodigi.pojos;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +12,8 @@ public class Order {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String id;
 
+    private LocalDateTime created;
+    private LocalDateTime lastUpdated;
     private ShippingMethod shippingMethod;
     private Recipient recipient;
     private List<Item> items;
@@ -96,6 +99,26 @@ public class Order {
     @JsonProperty // ...but allow it to be read
     public void setShipments(List<Shipment> shipments) {
         this.shipments = shipments;
+    }
+
+    @JsonIgnore // don't serialise...
+    public LocalDateTime getCreated() {
+        return created;
+    }
+
+    @JsonProperty // ...but allow it to be read
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
+    }
+
+    @JsonIgnore // don't serialise...
+    public LocalDateTime getLastUpdated() {
+        return lastUpdated;
+    }
+
+    @JsonProperty // ...but allow it to be read
+    public void setLastUpdated(LocalDateTime lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 
     public enum ShippingMethod {
