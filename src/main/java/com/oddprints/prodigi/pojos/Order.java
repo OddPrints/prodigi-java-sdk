@@ -15,6 +15,7 @@ public class Order {
     private Recipient recipient;
     private List<Item> items;
     private Status status;
+    private List<Shipment> shipments;
 
     public static class Builder {
         private List<Item> builderItems;
@@ -77,7 +78,7 @@ public class Order {
         this.items = items;
     }
 
-    @JsonIgnore // don't serialise Status...
+    @JsonIgnore // don't serialise...
     public Status getStatus() {
         return status;
     }
@@ -85,6 +86,16 @@ public class Order {
     @JsonProperty // ...but allow it to be read
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    @JsonIgnore // don't serialise...
+    public List<Shipment> getShipments() {
+        return shipments;
+    }
+
+    @JsonProperty // ...but allow it to be read
+    public void setShipments(List<Shipment> shipments) {
+        this.shipments = shipments;
     }
 
     public enum ShippingMethod {
