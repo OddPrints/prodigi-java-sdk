@@ -19,13 +19,13 @@ class ProdigiTest {
 
     @BeforeEach
     public void setup() {
-        prodigi = new Prodigi(apiKey);
+        prodigi = new Prodigi(Prodigi.Environment.SANDBOX, apiKey);
     }
 
     @AfterAll
     public static void cleanup() {
         String apiKey = System.getenv("PRODIGI_API_KEY_SANDBOX");
-        Prodigi prodigi = new Prodigi(apiKey);
+        Prodigi prodigi = new Prodigi(Prodigi.Environment.SANDBOX, apiKey);
         List<Order> fetchedOrders = prodigi.getOrders(100, 0).getOrders();
         for (Order o : fetchedOrders) {
             prodigi.cancelOrder(o.getId());
@@ -53,7 +53,7 @@ class ProdigiTest {
     @Test
     void can_create_order() {
         Order o = dummyOrder();
-        Prodigi p = new Prodigi(apiKey);
+        Prodigi p = new Prodigi(Prodigi.Environment.SANDBOX, apiKey);
         OrderResponse response = p.createOrder(o);
         assertEquals(Status.Stage.InProgress, response.getOrder().getStatus().getStage());
     }
@@ -61,8 +61,8 @@ class ProdigiTest {
     @Test
     void must_supply_apikey() {
         try {
-            new Prodigi("");
-            new Prodigi(null);
+            new Prodigi(Prodigi.Environment.SANDBOX, "");
+            new Prodigi(Prodigi.Environment.SANDBOX, null);
             fail(); //  should have thrown
         } catch (IllegalArgumentException e) {
         }

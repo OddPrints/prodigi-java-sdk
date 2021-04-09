@@ -20,8 +20,9 @@ public class Prodigi {
     private static final Logger log = LoggerFactory.getLogger(Prodigi.class);
     private HttpClient httpClient;
     private WebClient webClient;
+    private static String API_VERSION = "v4.0";
 
-    public Prodigi(final String apiKey) {
+    public Prodigi(final Environment environment, final String apiKey) {
         if (apiKey == null || apiKey.trim().isEmpty()) {
             throw new IllegalArgumentException("No api key supplied. Try adding PRODIGI_API_KEY_SANDBOX to environment");
         }
@@ -31,7 +32,7 @@ public class Prodigi {
                         LogLevel.INFO, AdvancedByteBufFormat.TEXTUAL);
 
         webClient = WebClient.builder()
-                .baseUrl("https://api.sandbox.prodigi.com/v4.0")
+                .baseUrl(environment.url)
                 .defaultHeader("X-API-Key", apiKey)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
@@ -94,6 +95,17 @@ public class Prodigi {
         } catch (WebClientResponseException e) {
             log.error("response = " + e.getResponseBodyAsString());
             return false;
+        }
+    }
+
+    public enum Environment {
+        LIVE("https://api.prodigi.com/" + API_VERSION),
+        SANDBOX("https://api.sandbox.prodigi.com/" + API_VERSION);
+
+        private String url;
+
+        Environment(String url) {
+            this.url = url;
         }
     }
 }
