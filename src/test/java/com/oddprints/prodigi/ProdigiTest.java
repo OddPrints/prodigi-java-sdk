@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.oddprints.prodigi.pojos.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +18,15 @@ class ProdigiTest {
 
     private String apiKey = System.getenv("PRODIGI_API_KEY_SANDBOX");
     private Prodigi prodigi;
+    private static URL dummyUrl;
+
+    static {
+        try {
+            dummyUrl = new URL("https://www.oddprints.com/images/header-dogcat.jpg");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+    }
 
     @BeforeEach
     public void setup() {
@@ -46,7 +57,7 @@ class ProdigiTest {
 
     private Order dummyOrder(Order.ShippingMethod shippingMethod, Recipient recipient) {
         return new Order.Builder(shippingMethod, recipient)
-                .addImage("https://www.oddprints.com/images/header-dogcat.jpg", "GLOBAL-PHO-4x6", 1)
+                .addImage(dummyUrl, "GLOBAL-PHO-4x6", 1)
                 .build();
     }
 
@@ -113,14 +124,8 @@ class ProdigiTest {
     public void can_create_order_with_photos() {
         Order order =
                 new Order.Builder(Order.ShippingMethod.Standard, dummyRecipient())
-                        .addImage(
-                                "https://www.oddprints.com/images/header-dogcat.jpg",
-                                "GLOBAL-PHO-4x6",
-                                1)
-                        .addImage(
-                                "https://www.oddprints.com/images/header-dogcat.jpg",
-                                "GLOBAL-PHO-4x6-PRO",
-                                2)
+                        .addImage(dummyUrl, "GLOBAL-PHO-4x6", 1)
+                        .addImage(dummyUrl, "GLOBAL-PHO-4x6-PRO", 2)
                         .build();
         OrderResponse response = prodigi.createOrder(order);
         assertEquals(Status.Stage.InProgress, response.getOrder().getStatus().getStage());
@@ -132,10 +137,7 @@ class ProdigiTest {
         recipient.setPhoneNumber("123456");
         Order order =
                 new Order.Builder(Order.ShippingMethod.Standard, recipient)
-                        .addImage(
-                                "https://www.oddprints.com/images/header-dogcat.jpg",
-                                "GLOBAL-PHO-4x6",
-                                1)
+                        .addImage(dummyUrl, "GLOBAL-PHO-4x6", 1)
                         .build();
         OrderResponse response = prodigi.createOrder(order);
         assertEquals("123456", response.getOrder().getRecipient().getPhoneNumber());

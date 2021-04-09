@@ -1,6 +1,7 @@
 package com.oddprints.prodigi.pojos;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +28,7 @@ public class Item {
             builderCopies = copies;
         }
 
-        public Builder addAsset(String url) {
+        public Builder addAsset(URL url) {
             Asset asset = new Asset.Builder(url).build();
             builderAssets.add(asset);
             return this;

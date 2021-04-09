@@ -3,6 +3,7 @@ package com.oddprints.prodigi.pojos;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,7 @@ public class Order {
             builderRecipient = recipient;
         }
 
-        public Builder addImage(String url, String sku, int copies) {
+        public Builder addImage(URL url, String sku, int copies) {
             Item item = new Item.Builder(sku, copies).addAsset(url).build();
             builderItems.add(item);
             return this;

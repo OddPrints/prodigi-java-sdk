@@ -1,16 +1,17 @@
 package com.oddprints.prodigi.pojos;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.net.URL;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Asset {
     private String printArea = "default";
-    private String url = "https://www.oddprints.com/images/header-dogcat.jpg";
+    private URL url;
 
     public static class Builder {
-        private String builderUrl;
+        private URL builderUrl;
 
-        public Builder(String url) {
+        public Builder(URL url) {
             this.builderUrl = url;
         }
 
@@ -31,11 +32,11 @@ public class Asset {
         this.printArea = printArea;
     }
 
-    public String getUrl() {
+    public URL getUrl() {
         return url;
     }
 
-    public void setUrl(String url) {
+    public void setUrl(URL url) {
         this.url = url;
     }
 }
