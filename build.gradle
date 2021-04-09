@@ -19,6 +19,11 @@ jar {
 		attributes 'Implementation-Title': 'prodigi-java-sdk',
 				'Implementation-Version': archiveVersion
 	}
+    enabled = true
+}
+
+bootJar {
+	archiveClassifier = 'boot'
 }
 
 repositories {
