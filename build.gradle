@@ -2,11 +2,19 @@ plugins {
 	id 'org.springframework.boot' version '2.4.4'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id "com.jfrog.artifactory" version "4.21.0"
 }
 
 group = 'com.oddprints'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.1'
 sourceCompatibility = '1.8'
+
+jar {
+	manifest {
+		attributes 'Implementation-Title': 'prodigi-java-sdk',
+				'Implementation-Version': archiveVersion
+	}
+}
 
 repositories {
 	mavenCentral()
@@ -20,4 +28,52 @@ dependencies {
 
 test {
 	useJUnitPlatform()
+}
+
+// custom tasks for creating source/javadoc jars
+task sourcesJar(type: Jar, dependsOn:classes) {
+	archiveClassifier = 'sources'
+	from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn:javadoc) {
+	archiveClassifier = 'javadoc'
+	from javadoc.destinationDir
+}
+
+artifactoryPublish {
+	dependsOn build, sourcesJar, javadocJar
+}
+
+// add javadoc/source jar tasks as artifacts
+artifacts {
+	archives sourcesJar
+	archives javadocJar
+}
+
+configurations {
+	published
+}
+
+artifactory {
+	contextUrl = "${artifactoryUrl}"
+	publish {
+		repository {
+			repoKey = "libs-release-local"
+			username = "${artifactoryUsername}"
+			password = "${artifactoryPassword}"
+		}
+		defaults {
+			publishConfigs('archives', 'published')
+			publishArtifacts = true
+			properties = ['qa.level': 'basic', 'dev.team' : 'core']
+			publishPom = true
+		}
+	}
+	resolve {
+		repository {
+			repoKey = 'libs-release'
+			maven = true
+		}
+	}
 }
