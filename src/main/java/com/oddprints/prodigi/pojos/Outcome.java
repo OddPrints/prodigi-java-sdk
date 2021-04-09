@@ -8,8 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class Outcome {
     private String outcome;
 
-    public Outcome() {
-    }
+    public Outcome() {}
 
     public String getOutcome() {
         return outcome;

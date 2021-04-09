@@ -3,7 +3,6 @@ package com.oddprints.prodigi.pojos;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +10,7 @@ import java.util.List;
 public class Order {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String id;
+
     private ShippingMethod shippingMethod;
     private Recipient recipient;
     private List<Item> items;
@@ -42,8 +42,7 @@ public class Order {
         }
     }
 
-    private Order() {
-    }
+    private Order() {}
 
     @JsonIgnore // don't serialise id...
     public String getId() {
@@ -89,10 +88,14 @@ public class Order {
     }
 
     public enum ShippingMethod {
-        Budget, Standard, Express, Overnight;
+        Budget,
+        Standard,
+        Express,
+        Overnight;
     }
 
     public enum QualityLevel {
-        Pro, Standard;
+        Pro,
+        Standard;
     }
 }

@@ -2,9 +2,6 @@ package com.oddprints.prodigi.pojos;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Asset {
     private String printArea = "default";
@@ -24,8 +21,7 @@ public class Asset {
         }
     }
 
-    private Asset() {
-    }
+    private Asset() {}
 
     public String getPrintArea() {
         return printArea;

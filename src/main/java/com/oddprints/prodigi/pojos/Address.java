@@ -10,7 +10,12 @@ public class Address {
     private CountryCode countryCode;
     private String townOrCity;
 
-    public Address(String line1, String line2, String postalOrZipCode, CountryCode countryCode, String townOrCity) {
+    public Address(
+            String line1,
+            String line2,
+            String postalOrZipCode,
+            CountryCode countryCode,
+            String townOrCity) {
         this.line1 = line1;
         this.line2 = line2;
         this.postalOrZipCode = postalOrZipCode;
@@ -18,8 +23,7 @@ public class Address {
         this.townOrCity = townOrCity;
     }
 
-    private Address() {
-    }
+    private Address() {}
 
     public String getLine1() {
         return line1;

@@ -1,13 +1,11 @@
 package com.oddprints.prodigi;
 
-
 @SuppressWarnings("serial")
 public class ProdigiError extends RuntimeException {
     private String errorMessage;
     private int code;
 
-    public ProdigiError() {
-    }
+    public ProdigiError() {}
 
     public ProdigiError(String errorMessage, int code) {
         this.errorMessage = errorMessage;

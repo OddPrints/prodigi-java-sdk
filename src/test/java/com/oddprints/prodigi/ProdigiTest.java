@@ -1,15 +1,15 @@
 package com.oddprints.prodigi;
 
+import static com.oddprints.prodigi.pojos.CountryCode.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import com.oddprints.prodigi.pojos.*;
+import java.util.List;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import java.util.List;
-
-import static com.oddprints.prodigi.pojos.CountryCode.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 
 @SpringBootTest
 class ProdigiTest {
@@ -111,10 +111,17 @@ class ProdigiTest {
 
     @Test
     public void can_create_order_with_photos() {
-        Order order = new Order.Builder(Order.ShippingMethod.Standard, dummyRecipient())
-                .addImage("https://www.oddprints.com/images/header-dogcat.jpg", "GLOBAL-PHO-4x6", 1)
-                .addImage("https://www.oddprints.com/images/header-dogcat.jpg", "GLOBAL-PHO-4x6-PRO", 2)
-                .build();
+        Order order =
+                new Order.Builder(Order.ShippingMethod.Standard, dummyRecipient())
+                        .addImage(
+                                "https://www.oddprints.com/images/header-dogcat.jpg",
+                                "GLOBAL-PHO-4x6",
+                                1)
+                        .addImage(
+                                "https://www.oddprints.com/images/header-dogcat.jpg",
+                                "GLOBAL-PHO-4x6-PRO",
+                                2)
+                        .build();
         OrderResponse response = prodigi.createOrder(order);
         assertEquals(Status.Stage.InProgress, response.getOrder().getStatus().getStage());
     }
@@ -123,9 +130,13 @@ class ProdigiTest {
     public void can_create_order_with_phone_number() {
         Recipient recipient = dummyRecipient();
         recipient.setPhoneNumber("123456");
-        Order order = new Order.Builder(Order.ShippingMethod.Standard, recipient)
-                .addImage("https://www.oddprints.com/images/header-dogcat.jpg", "GLOBAL-PHO-4x6", 1)
-                .build();
+        Order order =
+                new Order.Builder(Order.ShippingMethod.Standard, recipient)
+                        .addImage(
+                                "https://www.oddprints.com/images/header-dogcat.jpg",
+                                "GLOBAL-PHO-4x6",
+                                1)
+                        .build();
         OrderResponse response = prodigi.createOrder(order);
         assertEquals("123456", response.getOrder().getRecipient().getPhoneNumber());
     }

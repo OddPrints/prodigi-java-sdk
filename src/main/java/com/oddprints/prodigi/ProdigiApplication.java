@@ -8,5 +8,4 @@ public class ProdigiApplication {
     public static void main(String... args) {
         SpringApplication.run(ProdigiApplication.class, args);
     }
-
 }

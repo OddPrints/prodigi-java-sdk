@@ -1,7 +1,7 @@
 package com.oddprints.prodigi;
 
-import com.oddprints.prodigi.pojos.OrderResponse;
 import com.oddprints.prodigi.pojos.Order;
+import com.oddprints.prodigi.pojos.OrderResponse;
 import com.oddprints.prodigi.pojos.OrdersResponse;
 import io.netty.handler.logging.LogLevel;
 import org.slf4j.Logger;
@@ -24,30 +24,33 @@ public class Prodigi {
 
     public Prodigi(final Environment environment, final String apiKey) {
         if (apiKey == null || apiKey.trim().isEmpty()) {
-            throw new IllegalArgumentException("No api key supplied. Try adding PRODIGI_API_KEY_SANDBOX to environment");
+            throw new IllegalArgumentException(
+                    "No api key supplied. Try adding PRODIGI_API_KEY_SANDBOX to environment");
         }
-        httpClient = HttpClient
-                .create()
-                .wiretap(this.getClass().getCanonicalName(),
-                        LogLevel.INFO, AdvancedByteBufFormat.TEXTUAL);
+        httpClient =
+                HttpClient.create()
+                        .wiretap(
+                                this.getClass().getCanonicalName(),
+                                LogLevel.INFO,
+                                AdvancedByteBufFormat.TEXTUAL);
 
-        webClient = WebClient.builder()
-                .baseUrl(environment.url)
-                .defaultHeader("X-API-Key", apiKey)
-                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .clientConnector(new ReactorClientHttpConnector(httpClient))
-                .build();
+        webClient =
+                WebClient.builder()
+                        .baseUrl(environment.url)
+                        .defaultHeader("X-API-Key", apiKey)
+                        .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                        .clientConnector(new ReactorClientHttpConnector(httpClient))
+                        .build();
     }
 
     public OrderResponse createOrder(Order order) {
         WebClient.UriSpec<WebClient.RequestBodySpec> uriSpec = webClient.post();
-        WebClient.RequestBodySpec bodySpec = uriSpec.uri(
-                uriBuilder -> uriBuilder.pathSegment("orders").build());
+        WebClient.RequestBodySpec bodySpec =
+                uriSpec.uri(uriBuilder -> uriBuilder.pathSegment("orders").build());
         WebClient.RequestHeadersSpec<?> headersSpec = bodySpec.body(BodyInserters.fromValue(order));
 
         try {
-            return headersSpec.retrieve()
-                    .bodyToMono(OrderResponse.class).block();
+            return headersSpec.retrieve().bodyToMono(OrderResponse.class).block();
         } catch (WebClientResponseException e) {
             log.error("response = " + e.getResponseBodyAsString());
             return null;
@@ -55,10 +58,8 @@ public class Prodigi {
     }
 
     public OrderResponse getOrder(String id) {
-        Mono<OrderResponse> orderMono = webClient.get()
-                .uri("/orders/{id}", id)
-                .retrieve()
-                .bodyToMono(OrderResponse.class);
+        Mono<OrderResponse> orderMono =
+                webClient.get().uri("/orders/{id}", id).retrieve().bodyToMono(OrderResponse.class);
 
         try {
             return orderMono.block();
@@ -69,12 +70,14 @@ public class Prodigi {
     }
 
     public OrdersResponse getOrders(int top, int skip) {
-        Mono<OrdersResponse> orderMono = webClient.get()
-                .uri("/orders")
-                .attribute("top", top)
-                .attribute("skip", skip)
-                .retrieve()
-                .bodyToMono(OrdersResponse.class);
+        Mono<OrdersResponse> orderMono =
+                webClient
+                        .get()
+                        .uri("/orders")
+                        .attribute("top", top)
+                        .attribute("skip", skip)
+                        .retrieve()
+                        .bodyToMono(OrdersResponse.class);
 
         try {
             return orderMono.block();
@@ -85,10 +88,12 @@ public class Prodigi {
     }
 
     public boolean cancelOrder(String id) {
-        Mono<OrderResponse> orderMono = webClient.post()
-                .uri("/orders/{id}/actions/cancel", id)
-                .retrieve()
-                .bodyToMono(OrderResponse.class);
+        Mono<OrderResponse> orderMono =
+                webClient
+                        .post()
+                        .uri("/orders/{id}/actions/cancel", id)
+                        .retrieve()
+                        .bodyToMono(OrderResponse.class);
 
         try {
             return orderMono.block().getOutcome().equalsIgnoreCase("cancelled");

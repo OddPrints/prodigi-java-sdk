@@ -13,8 +13,7 @@ public class Recipient {
         this.address = address;
     }
 
-    private Recipient() {
-    }
+    private Recipient() {}
 
     public String getName() {
         return name;
