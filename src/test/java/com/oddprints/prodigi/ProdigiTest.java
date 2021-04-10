@@ -188,4 +188,19 @@ class ProdigiTest {
         boolean stillUpdateable = prodigi.canChangeRecipientDetails(orderId);
         assertFalse(stillUpdateable);
     }
+
+    @Test
+    public void can_check_if_order_is_cancellable() {
+        Order order = dummyOrder();
+        OrderResponse response = prodigi.createOrder(order);
+        Recipient brian = dummyRecipient();
+        brian.setName("Brian");
+        String orderId = response.getOrder().getId();
+        boolean cancellable = prodigi.canCancel(orderId);
+        assertTrue(cancellable);
+
+        prodigi.cancelOrder(orderId);
+        boolean stillCancellable = prodigi.canCancel(orderId);
+        assertFalse(stillCancellable);
+    }
 }

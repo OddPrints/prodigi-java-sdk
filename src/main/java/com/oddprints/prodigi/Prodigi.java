@@ -118,7 +118,17 @@ public class Prodigi {
         }
     }
 
+    public boolean canCancel(String id) {
+        ActionsResponse actionsResponse = getActionsResponse(id);
+        return actionsResponse.getCancel().getIsAvailable().equalsIgnoreCase("Yes");
+    }
+
     public boolean canChangeRecipientDetails(String id) {
+        ActionsResponse actionsResponse = getActionsResponse(id);
+        return actionsResponse.getChangeRecipientDetails().getIsAvailable().equalsIgnoreCase("Yes");
+    }
+
+    private ActionsResponse getActionsResponse(String id) {
         Mono<ActionsResponse> orderMono =
                 webClient
                         .get()
@@ -127,13 +137,10 @@ public class Prodigi {
                         .bodyToMono(ActionsResponse.class);
         try {
             ActionsResponse actionsResponse = orderMono.block();
-            return actionsResponse
-                    .getChangeRecipientDetails()
-                    .getIsAvailable()
-                    .equalsIgnoreCase("Yes");
+            return actionsResponse;
         } catch (WebClientResponseException e) {
             log.error("response = " + e.getResponseBodyAsString());
-            return false;
+            return null;
         }
     }
 
