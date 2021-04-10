@@ -4,51 +4,58 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Details {
-    private String downloadAssets;
-    private String allocateProductionLocation;
-    private String printReadyAssetsPrepared;
-    private String inProduction;
-    private String shipping;
+    private Detail downloadAssets;
+    private Detail allocateProductionLocation;
+    private Detail printReadyAssetsPrepared;
+    private Detail inProduction;
+    private Detail shipping;
 
     private Details() {}
 
-    public String getDownloadAssets() {
+    public Detail getDownloadAssets() {
         return downloadAssets;
     }
 
-    public void setDownloadAssets(String downloadAssets) {
+    public void setDownloadAssets(Detail downloadAssets) {
         this.downloadAssets = downloadAssets;
     }
 
-    public String getAllocateProductionLocation() {
+    public Detail getAllocateProductionLocation() {
         return allocateProductionLocation;
     }
 
-    public void setAllocateProductionLocation(String allocateProductionLocation) {
+    public void setAllocateProductionLocation(Detail allocateProductionLocation) {
         this.allocateProductionLocation = allocateProductionLocation;
     }
 
-    public String getPrintReadyAssetsPrepared() {
+    public Detail getPrintReadyAssetsPrepared() {
         return printReadyAssetsPrepared;
     }
 
-    public void setPrintReadyAssetsPrepared(String printReadyAssetsPrepared) {
+    public void setPrintReadyAssetsPrepared(Detail printReadyAssetsPrepared) {
         this.printReadyAssetsPrepared = printReadyAssetsPrepared;
     }
 
-    public String getInProduction() {
+    public Detail getInProduction() {
         return inProduction;
     }
 
-    public void setInProduction(String inProduction) {
+    public void setInProduction(Detail inProduction) {
         this.inProduction = inProduction;
     }
 
-    public String getShipping() {
+    public Detail getShipping() {
         return shipping;
     }
 
-    public void setShipping(String shipping) {
+    public void setShipping(Detail shipping) {
         this.shipping = shipping;
+    }
+
+    public enum Detail {
+        NotStarted,
+        InProgress,
+        Complete,
+        Error
     }
 }

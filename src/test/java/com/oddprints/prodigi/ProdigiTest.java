@@ -1,6 +1,8 @@
 package com.oddprints.prodigi;
 
 import static com.oddprints.prodigi.pojos.CountryCode.*;
+import static com.oddprints.prodigi.pojos.Details.Detail.NotStarted;
+import static com.oddprints.prodigi.pojos.Status.Stage.InProgress;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.oddprints.prodigi.pojos.*;
@@ -65,7 +67,7 @@ class ProdigiTest {
         Order o = dummyOrder();
         Prodigi p = new Prodigi(Prodigi.Environment.SANDBOX, apiKey);
         OrderResponse response = p.createOrder(o);
-        assertEquals(Status.Stage.InProgress, response.getOrder().getStatus().getStage());
+        assertEquals(InProgress, response.getOrder().getStatus().getStage());
     }
 
     @Test
@@ -116,7 +118,7 @@ class ProdigiTest {
     public void can_create_order_and_get_status() {
         Order order = dummyOrder();
         OrderResponse response = prodigi.createOrder(order);
-        assertEquals(Status.Stage.InProgress, response.getOrder().getStatus().getStage());
+        assertEquals(InProgress, response.getOrder().getStatus().getStage());
     }
 
     @Test
@@ -127,7 +129,7 @@ class ProdigiTest {
                         .addImage(dummyUrl, "GLOBAL-PHO-4x6-PRO", 2)
                         .build();
         OrderResponse response = prodigi.createOrder(order);
-        assertEquals(Status.Stage.InProgress, response.getOrder().getStatus().getStage());
+        assertEquals(InProgress, response.getOrder().getStatus().getStage());
     }
 
     @Test
@@ -202,5 +204,13 @@ class ProdigiTest {
         prodigi.cancelOrder(orderId);
         boolean stillCancellable = prodigi.canCancel(orderId);
         assertFalse(stillCancellable);
+    }
+
+    @Test
+    public void can_check_status() {
+        Order order = dummyOrder();
+        OrderResponse response = prodigi.createOrder(order);
+        assertEquals(InProgress, response.getOrder().getStatus().getStage());
+        assertEquals(NotStarted, response.getOrder().getStatus().getDetails().getShipping());
     }
 }
