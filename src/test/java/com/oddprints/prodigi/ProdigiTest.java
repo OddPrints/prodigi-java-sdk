@@ -173,4 +173,19 @@ class ProdigiTest {
         boolean updated = prodigi.updateRecipient(response.getOrder().getId(), brian);
         assertTrue(updated);
     }
+
+    @Test
+    public void can_check_if_address_is_updateable() {
+        Order order = dummyOrder();
+        OrderResponse response = prodigi.createOrder(order);
+        Recipient brian = dummyRecipient();
+        brian.setName("Brian");
+        String orderId = response.getOrder().getId();
+        boolean updateable = prodigi.canChangeRecipientDetails(orderId);
+        assertTrue(updateable);
+
+        prodigi.cancelOrder(orderId);
+        boolean stillUpdateable = prodigi.canChangeRecipientDetails(orderId);
+        assertFalse(stillUpdateable);
+    }
 }

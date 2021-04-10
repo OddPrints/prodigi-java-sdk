@@ -1,9 +1,6 @@
 package com.oddprints.prodigi;
 
-import com.oddprints.prodigi.pojos.Order;
-import com.oddprints.prodigi.pojos.OrderResponse;
-import com.oddprints.prodigi.pojos.OrdersResponse;
-import com.oddprints.prodigi.pojos.Recipient;
+import com.oddprints.prodigi.pojos.*;
 import io.netty.handler.logging.LogLevel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -115,6 +112,25 @@ public class Prodigi {
 
         try {
             return orderMono.block().getOutcome().equalsIgnoreCase("updated");
+        } catch (WebClientResponseException e) {
+            log.error("response = " + e.getResponseBodyAsString());
+            return false;
+        }
+    }
+
+    public boolean canChangeRecipientDetails(String id) {
+        Mono<ActionsResponse> orderMono =
+                webClient
+                        .get()
+                        .uri("/orders/{id}/actions", id)
+                        .retrieve()
+                        .bodyToMono(ActionsResponse.class);
+        try {
+            ActionsResponse actionsResponse = orderMono.block();
+            return actionsResponse
+                    .getChangeRecipientDetails()
+                    .getIsAvailable()
+                    .equalsIgnoreCase("Yes");
         } catch (WebClientResponseException e) {
             log.error("response = " + e.getResponseBodyAsString());
             return false;
