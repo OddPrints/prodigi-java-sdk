@@ -9,6 +9,7 @@ public class Address {
     private String postalOrZipCode;
     private CountryCode countryCode;
     private String townOrCity;
+    private String stateOrCounty;
 
     public Address(
             String line1,
@@ -63,5 +64,13 @@ public class Address {
 
     public void setTownOrCity(String townOrCity) {
         this.townOrCity = townOrCity;
+    }
+
+    public String getStateOrCounty() {
+        return stateOrCounty;
+    }
+
+    public void setStateOrCounty(String stateOrCounty) {
+        this.stateOrCounty = stateOrCounty;
     }
 }
