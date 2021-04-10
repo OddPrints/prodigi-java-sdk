@@ -1,8 +1,7 @@
 package com.oddprints.prodigi;
 
 import static com.oddprints.prodigi.pojos.CountryCode.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.oddprints.prodigi.pojos.*;
 import java.net.MalformedURLException;
@@ -149,6 +148,29 @@ class ProdigiTest {
 
         OrderResponse response = prodigi.createOrder(order);
         boolean cancelled = prodigi.cancelOrder(response.getOrder().getId());
-        assertEquals(true, cancelled);
+        assertTrue(cancelled);
+    }
+
+    @Test
+    public void cannot_update_address_country() {
+        Recipient recipientGB = dummyRecipient(GB);
+        Order order =
+                new Order.Builder(Order.ShippingMethod.Standard, recipientGB)
+                        .addImage(dummyUrl, "GLOBAL-PHO-4x6", 1)
+                        .build();
+        OrderResponse response = prodigi.createOrder(order);
+        Recipient recipientUS = dummyRecipient(US);
+        boolean updated = prodigi.updateRecipient(response.getOrder().getId(), recipientUS);
+        assertFalse(updated);
+    }
+
+    @Test
+    public void can_update_address_name() {
+        Order order = dummyOrder();
+        OrderResponse response = prodigi.createOrder(order);
+        Recipient brian = dummyRecipient();
+        brian.setName("Brian");
+        boolean updated = prodigi.updateRecipient(response.getOrder().getId(), brian);
+        assertTrue(updated);
     }
 }
