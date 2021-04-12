@@ -180,8 +180,6 @@ class ProdigiTest {
     public void can_check_if_address_is_updateable() {
         Order order = dummyOrder();
         OrderResponse response = prodigi.createOrder(order);
-        Recipient brian = dummyRecipient();
-        brian.setName("Brian");
         String orderId = response.getOrder().getId();
         boolean updateable = prodigi.canChangeRecipientDetails(orderId);
         assertTrue(updateable);
@@ -195,8 +193,6 @@ class ProdigiTest {
     public void can_check_if_order_is_cancellable() {
         Order order = dummyOrder();
         OrderResponse response = prodigi.createOrder(order);
-        Recipient brian = dummyRecipient();
-        brian.setName("Brian");
         String orderId = response.getOrder().getId();
         boolean cancellable = prodigi.canCancel(orderId);
         assertTrue(cancellable);
@@ -204,6 +200,23 @@ class ProdigiTest {
         prodigi.cancelOrder(orderId);
         boolean stillCancellable = prodigi.canCancel(orderId);
         assertFalse(stillCancellable);
+    }
+
+    @Test
+    public void can_check_order_actions_are_fast() {
+        Order order = dummyOrder();
+        OrderResponse response = prodigi.createOrder(order);
+        String orderId = response.getOrder().getId();
+        prodigi.canCancel(orderId);
+
+        long start = System.currentTimeMillis();
+        for (int i = 0; i < 10; i++) {
+            prodigi.canCancel(orderId);
+        }
+        long end = System.currentTimeMillis();
+        long duration = end - start;
+        System.out.println("duration : " + duration);
+        assertTrue(duration < 100);
     }
 
     @Test

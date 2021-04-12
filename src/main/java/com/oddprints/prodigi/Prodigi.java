@@ -1,7 +1,10 @@
 package com.oddprints.prodigi;
 
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
 import com.oddprints.prodigi.pojos.*;
 import io.netty.handler.logging.LogLevel;
+import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -56,11 +59,14 @@ public class Prodigi {
     }
 
     public OrderResponse getOrder(String id) {
-        Mono<OrderResponse> orderMono =
-                webClient.get().uri("/orders/{id}", id).retrieve().bodyToMono(OrderResponse.class);
+        return getOrderResponseCache.get(id);
+    }
 
+    private OrderResponse getOrderResponseImpl(String id) {
+        Mono<OrderResponse> mono =
+                webClient.get().uri("/orders/{id}", id).retrieve().bodyToMono(OrderResponse.class);
         try {
-            return orderMono.block();
+            return mono.block();
         } catch (WebClientResponseException e) {
             log.error("response = " + e.getResponseBodyAsString());
             throw new ProdigiError(e.getResponseBodyAsString(), e.getRawStatusCode());
@@ -68,7 +74,7 @@ public class Prodigi {
     }
 
     public OrdersResponse getOrders(int top, int skip) {
-        Mono<OrdersResponse> orderMono =
+        Mono<OrdersResponse> mono =
                 webClient
                         .get()
                         .uri("/orders")
@@ -78,7 +84,7 @@ public class Prodigi {
                         .bodyToMono(OrdersResponse.class);
 
         try {
-            return orderMono.block();
+            return mono.block();
         } catch (WebClientResponseException e) {
             log.error("response = " + e.getResponseBodyAsString());
             throw new ProdigiError(e.getResponseBodyAsString(), e.getRawStatusCode());
@@ -86,15 +92,17 @@ public class Prodigi {
     }
 
     public boolean cancelOrder(String id) {
-        Mono<OrderResponse> orderMono =
+        Mono<OrderResponse> mono =
                 webClient
                         .post()
                         .uri("/orders/{id}/actions/cancel", id)
                         .retrieve()
                         .bodyToMono(OrderResponse.class);
-
         try {
-            return orderMono.block().getOutcome().equalsIgnoreCase("cancelled");
+            boolean response = mono.block().getOutcome().equalsIgnoreCase("cancelled");
+            getActionsResponseCache.invalidate(id);
+            getOrderResponseCache.invalidate(id);
+            return response;
         } catch (WebClientResponseException e) {
             log.error("response = " + e.getResponseBodyAsString());
             return false;
@@ -102,7 +110,7 @@ public class Prodigi {
     }
 
     public boolean updateRecipient(String id, Recipient recipient) {
-        Mono<OrderResponse> orderMono =
+        Mono<OrderResponse> mono =
                 webClient
                         .post()
                         .uri("/orders/{id}/actions/updateRecipient", id)
@@ -111,7 +119,10 @@ public class Prodigi {
                         .bodyToMono(OrderResponse.class);
 
         try {
-            return orderMono.block().getOutcome().equalsIgnoreCase("updated");
+            boolean response = mono.block().getOutcome().equalsIgnoreCase("updated");
+            getActionsResponseCache.invalidate(id);
+            getOrderResponseCache.invalidate(id);
+            return response;
         } catch (WebClientResponseException e) {
             log.error("response = " + e.getResponseBodyAsString());
             return false;
@@ -119,25 +130,37 @@ public class Prodigi {
     }
 
     public boolean canCancel(String id) {
-        ActionsResponse actionsResponse = getActionsResponse(id);
+        ActionsResponse actionsResponse = getActionsResponseCache.get(id);
         return actionsResponse.getCancel().getIsAvailable().equalsIgnoreCase("Yes");
     }
 
     public boolean canChangeRecipientDetails(String id) {
-        ActionsResponse actionsResponse = getActionsResponse(id);
+        ActionsResponse actionsResponse = getActionsResponseCache.get(id);
         return actionsResponse.getChangeRecipientDetails().getIsAvailable().equalsIgnoreCase("Yes");
     }
 
-    private ActionsResponse getActionsResponse(String id) {
-        Mono<ActionsResponse> orderMono =
+    private LoadingCache<String, ActionsResponse> getActionsResponseCache =
+            Caffeine.newBuilder()
+                    .expireAfterWrite(1, TimeUnit.MINUTES)
+                    .maximumSize(100)
+                    .build(k -> getActionsResponseImpl(k));
+
+    private LoadingCache<String, OrderResponse> getOrderResponseCache =
+            Caffeine.newBuilder()
+                    .expireAfterWrite(1, TimeUnit.MINUTES)
+                    .maximumSize(100)
+                    .build(k -> getOrderResponseImpl(k));
+
+    private ActionsResponse getActionsResponseImpl(String id) {
+        Mono<ActionsResponse> mono =
                 webClient
                         .get()
                         .uri("/orders/{id}/actions", id)
                         .retrieve()
                         .bodyToMono(ActionsResponse.class);
+
         try {
-            ActionsResponse actionsResponse = orderMono.block();
-            return actionsResponse;
+            return mono.block();
         } catch (WebClientResponseException e) {
             log.error("response = " + e.getResponseBodyAsString());
             return null;
