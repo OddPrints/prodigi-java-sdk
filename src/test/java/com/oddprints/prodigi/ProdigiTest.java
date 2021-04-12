@@ -5,10 +5,13 @@ import static com.oddprints.prodigi.pojos.Details.Detail.NotStarted;
 import static com.oddprints.prodigi.pojos.Status.Stage.InProgress;
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oddprints.prodigi.pojos.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -184,7 +187,7 @@ class ProdigiTest {
         boolean updateable = prodigi.canChangeRecipientDetails(orderId);
         assertTrue(updateable);
 
-        prodigi.cancelOrder(orderId);
+        assertTrue(prodigi.cancelOrder(orderId));
         boolean stillUpdateable = prodigi.canChangeRecipientDetails(orderId);
         assertFalse(stillUpdateable);
     }
@@ -197,7 +200,7 @@ class ProdigiTest {
         boolean cancellable = prodigi.canCancel(orderId);
         assertTrue(cancellable);
 
-        prodigi.cancelOrder(orderId);
+        assertTrue(prodigi.cancelOrder(orderId));
         boolean stillCancellable = prodigi.canCancel(orderId);
         assertFalse(stillCancellable);
     }
@@ -225,5 +228,19 @@ class ProdigiTest {
         OrderResponse response = prodigi.createOrder(order);
         assertEquals(InProgress, response.getOrder().getStatus().getStage());
         assertEquals(NotStarted, response.getOrder().getStatus().getDetails().getShipping());
+    }
+
+    @Test
+    public void can_get_raw_json() throws JsonProcessingException {
+        Order order = dummyOrder();
+        OrderResponse response = prodigi.createOrder(order);
+        String rawResponse = prodigi.getRawOrderResponse(response.getOrder().getId());
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> map = mapper.readValue(rawResponse, Map.class);
+
+        assertEquals(
+                "InProgress",
+                ((Map<String, Object>) ((Map<String, Object>) map.get("order")).get("status"))
+                        .get("stage"));
     }
 }

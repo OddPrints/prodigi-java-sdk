@@ -1,5 +1,7 @@
 package com.oddprints.prodigi;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import com.oddprints.prodigi.pojos.*;
@@ -70,6 +72,29 @@ public class Prodigi {
         } catch (WebClientResponseException e) {
             log.error("response = " + e.getResponseBodyAsString());
             throw new ProdigiError(e.getResponseBodyAsString(), e.getRawStatusCode());
+        }
+    }
+
+    public String getRawOrderResponse(String id) {
+        Mono<String> mono =
+                webClient.get().uri("/orders/{id}", id).retrieve().bodyToMono(String.class);
+
+        String json = "";
+        try {
+            json = mono.block();
+            ObjectMapper mapper = new ObjectMapper();
+
+            Object jsonObject = mapper.readValue(json, Object.class);
+            String prettyJson =
+                    mapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonObject);
+            return prettyJson;
+
+        } catch (WebClientResponseException e) {
+            log.error("response = " + e.getResponseBodyAsString());
+            throw new ProdigiError(e.getResponseBodyAsString(), e.getRawStatusCode());
+        } catch (JsonProcessingException e) {
+            log.error("response = " + json);
+            throw new RuntimeException(e);
         }
     }
 
