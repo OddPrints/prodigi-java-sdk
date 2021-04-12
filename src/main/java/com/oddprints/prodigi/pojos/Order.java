@@ -20,11 +20,13 @@ public class Order {
     private List<Item> items;
     private Status status;
     private List<Shipment> shipments;
+    private String merchantReference;
 
     public static class Builder {
         private List<Item> builderItems;
         private ShippingMethod builderShippingMethod;
         private Recipient builderRecipient;
+        private String builderMerchantReference;
 
         public Builder(ShippingMethod shippingMethod, Recipient recipient) {
             builderItems = new ArrayList<>();
@@ -35,6 +37,11 @@ public class Order {
         public Builder addImage(URL url, String sku, int copies) {
             Item item = new Item.Builder(sku, copies).addAsset(url).build();
             builderItems.add(item);
+            return this;
+        }
+
+        public Builder merchantReference(String merchantReference) {
+            builderMerchantReference = merchantReference;
             return this;
         }
 
@@ -80,6 +87,14 @@ public class Order {
 
     public void setItems(List<Item> items) {
         this.items = items;
+    }
+
+    public String getMerchantReference() {
+        return merchantReference;
+    }
+
+    public void setMerchantReference(String merchantReference) {
+        this.merchantReference = merchantReference;
     }
 
     @JsonIgnore // don't serialise...

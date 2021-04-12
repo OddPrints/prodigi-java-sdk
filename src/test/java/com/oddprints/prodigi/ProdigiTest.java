@@ -246,4 +246,16 @@ class ProdigiTest {
         String yaml = prodigi.getRawOrderResponseYaml(response.getOrder().getId());
         assertTrue(yaml.startsWith("---"));
     }
+
+    @Test
+    void can_supply_merchant_reference() {
+        Order order =
+                new Order.Builder(Order.ShippingMethod.Standard, dummyRecipient())
+                        .addImage(dummyUrl, "GLOBAL-PHO-4x6", 1)
+                        .merchantReference("testRef")
+                        .build();
+        Prodigi p = new Prodigi(Prodigi.Environment.SANDBOX, apiKey);
+        OrderResponse response = p.createOrder(order);
+        assertEquals("testRef", response.getOrder().getMerchantReference());
+    }
 }
