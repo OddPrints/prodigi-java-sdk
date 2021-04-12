@@ -63,6 +63,9 @@ public class Prodigi {
     }
 
     public OrderResponse getOrder(String id) {
+        if (id == null) {
+            return null;
+        }
         return getOrderResponseCache.get(id);
     }
 
