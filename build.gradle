@@ -35,6 +35,7 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.projectreactor:reactor-test'
 	compile 'com.github.ben-manes.caffeine:caffeine:2.5.5'
+	compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.11.4'
 }
 
 spotless {

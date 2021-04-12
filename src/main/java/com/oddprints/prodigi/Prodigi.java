@@ -1,7 +1,9 @@
 package com.oddprints.prodigi;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import com.oddprints.prodigi.pojos.*;
@@ -76,6 +78,10 @@ public class Prodigi {
     }
 
     public String getRawOrderResponse(String id) {
+        return getRawOrderResponse(id, false);
+    }
+
+    public String getRawOrderResponse(String id, boolean asYaml) {
         Mono<String> mono =
                 webClient.get().uri("/orders/{id}", id).retrieve().bodyToMono(String.class);
 
@@ -84,11 +90,17 @@ public class Prodigi {
             json = mono.block();
             ObjectMapper mapper = new ObjectMapper();
 
-            Object jsonObject = mapper.readValue(json, Object.class);
-            String prettyJson =
-                    mapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonObject);
-            return prettyJson;
-
+            if (asYaml) {
+                JsonNode jsonNodeTree = new ObjectMapper().readTree(json);
+                // save it as YAML
+                String jsonAsYaml = new YAMLMapper().writeValueAsString(jsonNodeTree);
+                return jsonAsYaml;
+            } else {
+                Object jsonObject = mapper.readValue(json, Object.class);
+                String prettyJson =
+                        mapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonObject);
+                return prettyJson;
+            }
         } catch (WebClientResponseException e) {
             log.error("response = " + e.getResponseBodyAsString());
             throw new ProdigiError(e.getResponseBodyAsString(), e.getRawStatusCode());

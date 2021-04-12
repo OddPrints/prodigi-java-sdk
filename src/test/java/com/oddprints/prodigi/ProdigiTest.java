@@ -243,4 +243,12 @@ class ProdigiTest {
                 ((Map<String, Object>) ((Map<String, Object>) map.get("order")).get("status"))
                         .get("stage"));
     }
+
+    @Test
+    public void can_get_raw_yaml() {
+        Order order = dummyOrder();
+        OrderResponse response = prodigi.createOrder(order);
+        String yaml = prodigi.getRawOrderResponse(response.getOrder().getId(), true);
+        assertTrue(yaml.startsWith("---"));
+    }
 }
