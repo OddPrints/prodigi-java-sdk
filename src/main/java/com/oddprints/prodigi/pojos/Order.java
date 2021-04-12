@@ -50,6 +50,7 @@ public class Order {
             order.setItems(builderItems);
             order.setShippingMethod(builderShippingMethod);
             order.setRecipient(builderRecipient);
+            order.setMerchantReference(builderMerchantReference);
             return order;
         }
     }
