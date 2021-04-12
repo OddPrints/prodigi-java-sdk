@@ -77,11 +77,15 @@ public class Prodigi {
         }
     }
 
-    public String getRawOrderResponse(String id) {
-        return getRawOrderResponse(id, false);
+    public JsonNode getRawOrderResponseJsonNode(String id) throws JsonProcessingException {
+        return new ObjectMapper().readTree(getRawOrderResponseImpl(id, false));
     }
 
-    public String getRawOrderResponse(String id, boolean asYaml) {
+    public String getRawOrderResponseYaml(String id) {
+        return getRawOrderResponseImpl(id, true);
+    }
+
+    private String getRawOrderResponseImpl(String id, boolean asYaml) {
         Mono<String> mono =
                 webClient.get().uri("/orders/{id}", id).retrieve().bodyToMono(String.class);
 

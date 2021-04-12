@@ -6,12 +6,11 @@ import static com.oddprints.prodigi.pojos.Status.Stage.InProgress;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.oddprints.prodigi.pojos.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
-import java.util.Map;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -234,21 +233,17 @@ class ProdigiTest {
     public void can_get_raw_json() throws JsonProcessingException {
         Order order = dummyOrder();
         OrderResponse response = prodigi.createOrder(order);
-        String rawResponse = prodigi.getRawOrderResponse(response.getOrder().getId());
-        ObjectMapper mapper = new ObjectMapper();
-        Map<String, Object> map = mapper.readValue(rawResponse, Map.class);
+        JsonNode jsonNode = prodigi.getRawOrderResponseJsonNode(response.getOrder().getId());
+        String stage = jsonNode.at("/order/status/stage").asText();
 
-        assertEquals(
-                "InProgress",
-                ((Map<String, Object>) ((Map<String, Object>) map.get("order")).get("status"))
-                        .get("stage"));
+        assertEquals("InProgress", stage);
     }
 
     @Test
     public void can_get_raw_yaml() {
         Order order = dummyOrder();
         OrderResponse response = prodigi.createOrder(order);
-        String yaml = prodigi.getRawOrderResponse(response.getOrder().getId(), true);
+        String yaml = prodigi.getRawOrderResponseYaml(response.getOrder().getId());
         assertTrue(yaml.startsWith("---"));
     }
 }
