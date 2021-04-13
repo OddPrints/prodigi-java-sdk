@@ -81,14 +81,23 @@ public class Prodigi {
     }
 
     public JsonNode getRawOrderResponseJsonNode(String id) throws JsonProcessingException {
+        if (id == null) {
+            return null;
+        }
         return new ObjectMapper().readTree(getRawOrderResponseImpl(id, false));
     }
 
     public String getRawOrderResponseYaml(String id) {
+        if (id == null) {
+            return null;
+        }
         return getRawOrderResponseImpl(id, true);
     }
 
     private String getRawOrderResponseImpl(String id, boolean asYaml) {
+        if (id == null) {
+            return null;
+        }
         Mono<String> mono =
                 webClient.get().uri("/orders/{id}", id).retrieve().bodyToMono(String.class);
 
@@ -154,6 +163,9 @@ public class Prodigi {
     }
 
     public boolean updateRecipient(String id, Recipient recipient) {
+        if (id == null || recipient == null) {
+            return false;
+        }
         Mono<OrderResponse> mono =
                 webClient
                         .post()
@@ -174,11 +186,17 @@ public class Prodigi {
     }
 
     public boolean canCancel(String id) {
+        if (id == null) {
+            return false;
+        }
         ActionsResponse actionsResponse = getActionsResponseCache.get(id);
         return actionsResponse.getCancel().getIsAvailable().equalsIgnoreCase("Yes");
     }
 
     public boolean canChangeRecipientDetails(String id) {
+        if (id == null) {
+            return false;
+        }
         ActionsResponse actionsResponse = getActionsResponseCache.get(id);
         return actionsResponse.getChangeRecipientDetails().getIsAvailable().equalsIgnoreCase("Yes");
     }

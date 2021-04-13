@@ -258,4 +258,15 @@ class ProdigiTest {
         OrderResponse response = p.createOrder(order);
         assertEquals("testRef", response.getOrder().getMerchantReference());
     }
+
+    @Test
+    public void can_handle_nulls() throws JsonProcessingException {
+        assertFalse(prodigi.canCancel(null));
+        assertFalse(prodigi.cancelOrder(null));
+        assertFalse(prodigi.canChangeRecipientDetails(null));
+        assertFalse(prodigi.updateRecipient(null, null));
+        assertNull(prodigi.getOrder(null));
+        assertNull(prodigi.getRawOrderResponseJsonNode(null));
+        assertNull(prodigi.getRawOrderResponseYaml(null));
+    }
 }
