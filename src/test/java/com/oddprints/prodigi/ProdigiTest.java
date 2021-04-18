@@ -269,4 +269,15 @@ class ProdigiTest {
         assertNull(prodigi.getRawOrderResponseJsonNode(null));
         assertNull(prodigi.getRawOrderResponseYaml(null));
     }
+
+    @Test
+    public void can_handle_whitespace_values() throws JsonProcessingException {
+        Order order = dummyOrder();
+        Recipient brian = dummyRecipient();
+        brian.setName("Brian");
+        brian.setPhoneNumber(" ");
+        order.setRecipient(brian);
+        OrderResponse response = prodigi.createOrder(order);
+        assertEquals(InProgress, response.getOrder().getStatus().getStage());
+    }
 }

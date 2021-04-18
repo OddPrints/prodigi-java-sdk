@@ -16,7 +16,7 @@ public class Recipient {
     public Recipient(String name, Address address, String phoneNumber, String email) {
         this.name = name;
         this.address = address;
-        this.phoneNumber = phoneNumber;
+        setPhoneNumber(phoneNumber);
         this.email = email;
     }
 
@@ -43,7 +43,9 @@ public class Recipient {
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+        if (phoneNumber != null && !phoneNumber.trim().isEmpty()) {
+            this.phoneNumber = phoneNumber;
+        }
     }
 
     public String getEmail() {
