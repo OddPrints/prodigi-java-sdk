@@ -1,5 +1,7 @@
 package com.oddprints.prodigi.pojos;
 
+import static org.apache.logging.log4j.util.Strings.trimToNull;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -17,11 +19,11 @@ public class Address {
             String postalOrZipCode,
             CountryCode countryCode,
             String townOrCity) {
-        this.line1 = line1;
-        this.line2 = line2;
-        this.postalOrZipCode = postalOrZipCode;
-        this.countryCode = countryCode;
-        this.townOrCity = townOrCity;
+        setLine1(line1);
+        setLine2(line2);
+        setPostalOrZipCode(postalOrZipCode);
+        setCountryCode(countryCode);
+        setTownOrCity(townOrCity);
     }
 
     private Address() {}
@@ -31,7 +33,7 @@ public class Address {
     }
 
     public void setLine1(String line1) {
-        this.line1 = line1;
+        this.line1 = trimToNull(line1);
     }
 
     public String getLine2() {
@@ -39,7 +41,7 @@ public class Address {
     }
 
     public void setLine2(String line2) {
-        this.line2 = line2;
+        this.line2 = trimToNull(line2);
     }
 
     public String getPostalOrZipCode() {
@@ -47,7 +49,7 @@ public class Address {
     }
 
     public void setPostalOrZipCode(String postalOrZipCode) {
-        this.postalOrZipCode = postalOrZipCode;
+        this.postalOrZipCode = trimToNull(postalOrZipCode);
     }
 
     public CountryCode getCountryCode() {
@@ -63,7 +65,7 @@ public class Address {
     }
 
     public void setTownOrCity(String townOrCity) {
-        this.townOrCity = townOrCity;
+        this.townOrCity = trimToNull(townOrCity);
     }
 
     public String getStateOrCounty() {
@@ -71,6 +73,6 @@ public class Address {
     }
 
     public void setStateOrCounty(String stateOrCounty) {
-        this.stateOrCounty = stateOrCounty;
+        this.stateOrCounty = trimToNull(stateOrCounty);
     }
 }

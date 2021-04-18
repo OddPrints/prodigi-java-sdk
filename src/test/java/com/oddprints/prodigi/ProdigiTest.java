@@ -271,12 +271,26 @@ class ProdigiTest {
     }
 
     @Test
-    public void can_handle_whitespace_values() throws JsonProcessingException {
+    public void can_handle_empty_values() {
         Order order = dummyOrder();
-        Recipient brian = dummyRecipient();
-        brian.setName("Brian");
-        brian.setPhoneNumber(" ");
-        order.setRecipient(brian);
+        Recipient empty =
+                new Recipient(
+                        "empty", new Address("required", "", "required", GB, "required"), "", "");
+        order.setRecipient(empty);
+        OrderResponse response = prodigi.createOrder(order);
+        assertEquals(InProgress, response.getOrder().getStatus().getStage());
+    }
+
+    @Test
+    public void can_handle_blank_values() {
+        Order order = dummyOrder();
+        Recipient blank =
+                new Recipient(
+                        "Blank Frank",
+                        new Address("required", " ", "required", GB, "required"),
+                        " ",
+                        " ");
+        order.setRecipient(blank);
         OrderResponse response = prodigi.createOrder(order);
         assertEquals(InProgress, response.getOrder().getStatus().getStage());
     }

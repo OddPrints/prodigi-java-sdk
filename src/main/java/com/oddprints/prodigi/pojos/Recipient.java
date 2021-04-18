@@ -1,5 +1,7 @@
 package com.oddprints.prodigi.pojos;
 
+import static org.apache.logging.log4j.util.Strings.trimToNull;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -14,10 +16,10 @@ public class Recipient {
     }
 
     public Recipient(String name, Address address, String phoneNumber, String email) {
-        this.name = name;
-        this.address = address;
+        setName(name);
+        setAddress(address);
         setPhoneNumber(phoneNumber);
-        this.email = email;
+        setEmail(email);
     }
 
     private Recipient() {}
@@ -27,7 +29,7 @@ public class Recipient {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = trimToNull(name);
     }
 
     public Address getAddress() {
@@ -43,9 +45,7 @@ public class Recipient {
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        if (phoneNumber != null && !phoneNumber.trim().isEmpty()) {
-            this.phoneNumber = phoneNumber;
-        }
+        this.phoneNumber = trimToNull(phoneNumber);
     }
 
     public String getEmail() {
@@ -53,6 +53,6 @@ public class Recipient {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.email = trimToNull(email);
     }
 }
