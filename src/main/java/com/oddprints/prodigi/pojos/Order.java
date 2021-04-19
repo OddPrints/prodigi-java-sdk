@@ -1,5 +1,6 @@
 package com.oddprints.prodigi.pojos;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -143,6 +144,11 @@ public class Order {
         Standard,
         Express,
         Overnight;
+
+        @JsonCreator
+        public static ShippingMethod fromString(String key) {
+            return key.isEmpty() ? null : ShippingMethod.valueOf(key);
+        }
     }
 
     public enum QualityLevel {
