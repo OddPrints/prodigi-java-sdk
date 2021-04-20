@@ -51,7 +51,8 @@ class ProdigiTest {
     }
 
     private Recipient dummyRecipient(CountryCode countryCode) {
-        return new Recipient("Bob", new Address("line1", "line2", "90210", countryCode, "Bristol"));
+        return new Recipient(
+                "Bob", new Address("line1", "line2", "90210", countryCode, "Bristol", "NY"));
     }
 
     private Order dummyOrder() {
@@ -275,7 +276,10 @@ class ProdigiTest {
         Order order = dummyOrder();
         Recipient empty =
                 new Recipient(
-                        "empty", new Address("required", "", "required", GB, "required"), "", "");
+                        "empty",
+                        new Address("required", "", "required", GB, "required", ""),
+                        "",
+                        "");
         order.setRecipient(empty);
         OrderResponse response = prodigi.createOrder(order);
         assertEquals(InProgress, response.getOrder().getStatus().getStage());
@@ -287,11 +291,19 @@ class ProdigiTest {
         Recipient blank =
                 new Recipient(
                         "Blank Frank",
-                        new Address("required", " ", "required", GB, "required"),
+                        new Address("required", " ", "required", GB, "required", " "),
                         " ",
                         " ");
         order.setRecipient(blank);
         OrderResponse response = prodigi.createOrder(order);
         assertEquals(InProgress, response.getOrder().getStatus().getStage());
+    }
+
+    @Test
+    public void can_handle_state_or_county() {
+        Order order = dummyOrder();
+        order.getRecipient().getAddress().setStateOrCounty("MI");
+        OrderResponse response = prodigi.createOrder(order);
+        assertEquals("MI", response.getOrder().getRecipient().getAddress().getStateOrCounty());
     }
 }

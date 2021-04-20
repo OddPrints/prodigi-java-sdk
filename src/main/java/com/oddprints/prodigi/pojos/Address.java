@@ -18,12 +18,14 @@ public class Address {
             String line2,
             String postalOrZipCode,
             CountryCode countryCode,
-            String townOrCity) {
+            String townOrCity,
+            String stateOrCounty) {
         setLine1(line1);
         setLine2(line2);
         setPostalOrZipCode(postalOrZipCode);
         setCountryCode(countryCode);
         setTownOrCity(townOrCity);
+        setStateOrCounty(stateOrCounty);
     }
 
     private Address() {}
