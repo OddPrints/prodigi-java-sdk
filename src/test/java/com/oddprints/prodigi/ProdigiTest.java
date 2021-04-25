@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oddprints.prodigi.pojos.*;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -305,5 +306,19 @@ class ProdigiTest {
         order.getRecipient().getAddress().setStateOrCounty("MI");
         OrderResponse response = prodigi.createOrder(order);
         assertEquals("MI", response.getOrder().getRecipient().getAddress().getStateOrCounty());
+    }
+
+    @Test void can_read_empty_shipping_method() throws JsonProcessingException {
+        Order order = dummyOrder();
+        OrderResponse response = prodigi.createOrder(order);
+        JsonNode jsonNode = prodigi.getRawOrderResponseJsonNode(response.getOrder().getId());
+        String json = jsonNode.toPrettyString();
+
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        //JSON string to Java Object
+        OrderResponse obj = mapper.readValue(json, OrderResponse.class);
+        fail();
     }
 }

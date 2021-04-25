@@ -57,8 +57,8 @@ public class Prodigi {
         try {
             return headersSpec.retrieve().bodyToMono(OrderResponse.class).block();
         } catch (WebClientResponseException e) {
-            log.error("response = " + e.getResponseBodyAsString());
-            return null;
+            log.error("error, response = " + e.getResponseBodyAsString(), e);
+            throw new ProdigiError(e.getResponseBodyAsString(), e.getRawStatusCode());
         }
     }
 
@@ -75,7 +75,7 @@ public class Prodigi {
         try {
             return mono.block();
         } catch (WebClientResponseException e) {
-            log.error("response = " + e.getResponseBodyAsString());
+            log.error("error, response = " + e.getResponseBodyAsString(), e);
             throw new ProdigiError(e.getResponseBodyAsString(), e.getRawStatusCode());
         }
     }
@@ -139,7 +139,7 @@ public class Prodigi {
         try {
             return mono.block();
         } catch (WebClientResponseException e) {
-            log.error("response = " + e.getResponseBodyAsString());
+            log.error("error, response = " + e.getResponseBodyAsString(), e);
             throw new ProdigiError(e.getResponseBodyAsString(), e.getRawStatusCode());
         }
     }
@@ -157,7 +157,7 @@ public class Prodigi {
             getOrderResponseCache.invalidate(id);
             return response;
         } catch (WebClientResponseException e) {
-            log.error("response = " + e.getResponseBodyAsString());
+            log.error("error, response = " + e.getResponseBodyAsString(), e);
             return false;
         }
     }
@@ -180,7 +180,7 @@ public class Prodigi {
             getOrderResponseCache.invalidate(id);
             return response;
         } catch (WebClientResponseException e) {
-            log.error("response = " + e.getResponseBodyAsString());
+            log.error("error, response = " + e.getResponseBodyAsString(), e);
             return false;
         }
     }
@@ -224,7 +224,7 @@ public class Prodigi {
         try {
             return mono.block();
         } catch (WebClientResponseException e) {
-            log.error("response = " + e.getResponseBodyAsString());
+            log.error("error, response = " + e.getResponseBodyAsString(), e);
             return null;
         }
     }
