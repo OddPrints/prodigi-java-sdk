@@ -11,6 +11,8 @@ public class Shipment {
     private Tracking tracking;
     private LocalDateTime dispatchDate;
     private List<ShipmentItem> items;
+    private FulfillmentLocation fulfillmentLocation;
+    private String status;
 
     private Shipment() {}
 
@@ -52,5 +54,21 @@ public class Shipment {
 
     public void setItems(List<ShipmentItem> items) {
         this.items = items;
+    }
+
+    public FulfillmentLocation getFulfillmentLocation() {
+        return fulfillmentLocation;
+    }
+
+    public void setFulfillmentLocation(FulfillmentLocation fulfillmentLocation) {
+        this.fulfillmentLocation = fulfillmentLocation;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
