@@ -1,5 +1,5 @@
-Pwinty-Java-SDK
-===============
+Prodigi-Java-SDK
+================
 
 A java library for communicating with the [Prodigi API](https://www.prodigi.com/print-api/docs/).
 
