@@ -73,25 +73,3 @@ configurations {
 	published
 }
 
-artifactory {
-	contextUrl = "${artifactoryUrl}"
-	publish {
-		repository {
-			repoKey = "libs-release-local"
-			username = "${artifactoryUsername}"
-			password = "${artifactoryPassword}"
-		}
-		defaults {
-			publishConfigs('archives', 'published')
-			publishArtifacts = true
-			properties = ['qa.level': 'basic', 'dev.team' : 'core']
-			publishPom = true
-		}
-	}
-	resolve {
-		repository {
-			repoKey = 'libs-release'
-			maven = true
-		}
-	}
-}
