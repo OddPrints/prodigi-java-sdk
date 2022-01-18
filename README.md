@@ -38,7 +38,20 @@ OrderResponse response = prodigi.createOrder(order);
 Download
 --------
 
-Checkout, then run `./gradlew install`. Then you can just add this to your gradle dependencies : `compile 'com.oddprints:prodigi-java-sdk:4.0.0' `
+See [jitpack](https://jitpack.io/#OddPrints/prodigi-java-sdk/)
+
+Basically, add the jitpack repoository:
+
+    repositories {
+        ...
+        maven { url 'https://jitpack.io' }
+    }
+
+and the dependency:
+
+    dependencies {
+        implementation 'com.github.OddPrints:prodigi-java-sdk:v4.0.1'
+    }
 
 
 Contribute/Extend
