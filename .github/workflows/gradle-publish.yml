@@ -7,6 +7,9 @@
 
 name: Gradle Package
 
+env:
+  PRODIGI_API_KEY_SANDBOX: ${{ secrets.PRODIGI_API_KEY_SANDBOX }}
+
 on:
   release:
     types: [created]
