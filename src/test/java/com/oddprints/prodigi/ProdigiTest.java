@@ -33,6 +33,9 @@ class ProdigiTest {
 
     @BeforeEach
     public void setup() {
+        if (apiKey == null || apiKey.trim().isEmpty()) {
+            fail("PRODIGI_API_KEY_SANDBOX environment variable was not set");
+        }
         prodigi = new Prodigi(Prodigi.Environment.SANDBOX, apiKey);
     }
 
