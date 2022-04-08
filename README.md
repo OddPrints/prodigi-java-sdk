@@ -50,7 +50,7 @@ Basically, add the jitpack repoository:
 and the dependency:
 
     dependencies {
-        implementation 'com.github.OddPrints:prodigi-java-sdk:v4.0.1'
+        implementation 'com.github.OddPrints:prodigi-java-sdk:v4.0.2'
     }
 
 
