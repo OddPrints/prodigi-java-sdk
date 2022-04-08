@@ -32,9 +32,9 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-webflux'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'io.projectreactor:reactor-test'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux:2.6.6'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test:2.6.6'
+	testImplementation 'io.projectreactor:reactor-test:3.4.16'
 	compile 'com.github.ben-manes.caffeine:caffeine:2.5.5'
 	compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.2'
 }
