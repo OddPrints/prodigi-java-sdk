@@ -40,17 +40,17 @@ Download
 
 See [jitpack](https://jitpack.io/#OddPrints/prodigi-java-sdk/)
 
-Basically, add the jitpack repoository:
+Basically, add the jitpack repository:
 
     repositories {
         ...
         maven { url 'https://jitpack.io' }
     }
 
-and the dependency:
+and the dependency using the short git commit reference as the version:
 
     dependencies {
-        implementation 'com.github.OddPrints:prodigi-java-sdk:v4.0.2'
+        implementation 'com.github.OddPrints:prodigi-java-sdk:f3483f2'
     }
 
 
