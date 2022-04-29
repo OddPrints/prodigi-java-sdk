@@ -21,6 +21,7 @@ jar {
 				'Implementation-Version': archiveVersion
 	}
     enabled = true
+	archiveClassifier = '' // use empty string instead of "plain"
 }
 
 bootJar {
