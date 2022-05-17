@@ -120,9 +120,13 @@ public class Order {
         this.shipments = shipments;
     }
 
-    public List<Charge> getCharges() { return charges; }
+    public List<Charge> getCharges() {
+        return charges;
+    }
 
-    public void setCharges(List<Charge> charges) { this.charges = charges; }
+    public void setCharges(List<Charge> charges) {
+        this.charges = charges;
+    }
 
     @JsonIgnore // don't serialise...
     public LocalDateTime getCreated() {

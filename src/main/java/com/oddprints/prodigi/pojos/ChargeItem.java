@@ -12,7 +12,7 @@ public class ChargeItem {
     private String merchantItemReference;
     private Cost cost;
 
-    private ChargeItem() { }
+    private ChargeItem() {}
 
     public String getId() {
         return id;

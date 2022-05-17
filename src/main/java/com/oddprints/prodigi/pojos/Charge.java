@@ -1,20 +1,19 @@
 package com.oddprints.prodigi.pojos;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Charge {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String id;
+
     private String prodigiInvoiceNumber;
     private Cost totalCost;
     private List<ChargeItem> items;
 
-    private Charge() { }
+    private Charge() {}
 
     public String getId() {
         return id;
