@@ -2,6 +2,7 @@
 build
 reports
 .gradle
+bin
 
 ## IntelliJ IDEA
 .idea
