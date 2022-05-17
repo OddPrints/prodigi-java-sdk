@@ -20,6 +20,7 @@ public class Order {
     private Recipient recipient;
     private List<Item> items;
     private Status status;
+    private List<Charge> charges;
     private List<Shipment> shipments;
     private String merchantReference;
 
@@ -118,6 +119,10 @@ public class Order {
     public void setShipments(List<Shipment> shipments) {
         this.shipments = shipments;
     }
+
+    public List<Charge> getCharges() { return charges; }
+
+    public void setCharges(List<Charge> charges) { this.charges = charges; }
 
     @JsonIgnore // don't serialise...
     public LocalDateTime getCreated() {
