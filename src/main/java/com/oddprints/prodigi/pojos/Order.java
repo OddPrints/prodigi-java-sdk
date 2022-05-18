@@ -120,10 +120,12 @@ public class Order {
         this.shipments = shipments;
     }
 
+    @JsonIgnore // don't serialise...
     public List<Charge> getCharges() {
         return charges;
     }
 
+    @JsonProperty // ...but allow it to be read
     public void setCharges(List<Charge> charges) {
         this.charges = charges;
     }
