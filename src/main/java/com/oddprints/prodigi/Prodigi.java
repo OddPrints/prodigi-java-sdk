@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
@@ -23,9 +24,9 @@ import reactor.netty.transport.logging.AdvancedByteBufFormat;
 
 public class Prodigi {
     private static final Logger log = LoggerFactory.getLogger(Prodigi.class);
-    private HttpClient httpClient;
-    private WebClient webClient;
-    private static String API_VERSION = "v4.0";
+    private final HttpClient httpClient;
+    private final WebClient webClient;
+    private static final String API_VERSION = "v4.0";
 
     public Prodigi(final Environment environment, final String apiKey) {
         if (apiKey == null || apiKey.trim().isEmpty()) {
@@ -39,12 +40,21 @@ public class Prodigi {
                                 LogLevel.INFO,
                                 AdvancedByteBufFormat.TEXTUAL);
 
+
+        int maxByteCount = 16 * 1024 * 1024;
+        ExchangeStrategies exchangeStrategies = ExchangeStrategies.builder()
+                                                                  .codecs( configurer -> configurer.defaultCodecs()
+                                                                                .maxInMemorySize(maxByteCount))
+                                                                  .build();
+
+
         webClient =
                 WebClient.builder()
                         .baseUrl(environment.url)
                         .defaultHeader("X-API-Key", apiKey)
                         .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                         .clientConnector(new ReactorClientHttpConnector(httpClient))
+                        .exchangeStrategies(exchangeStrategies)
                         .build();
     }
 
