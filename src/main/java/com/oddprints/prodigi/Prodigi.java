@@ -40,13 +40,13 @@ public class Prodigi {
                                 LogLevel.INFO,
                                 AdvancedByteBufFormat.TEXTUAL);
 
-
         int maxByteCount = 16 * 1024 * 1024;
-        ExchangeStrategies exchangeStrategies = ExchangeStrategies.builder()
-                                                                  .codecs( configurer -> configurer.defaultCodecs()
-                                                                                .maxInMemorySize(maxByteCount))
-                                                                  .build();
-
+        ExchangeStrategies exchangeStrategies =
+                ExchangeStrategies.builder()
+                        .codecs(
+                                configurer ->
+                                        configurer.defaultCodecs().maxInMemorySize(maxByteCount))
+                        .build();
 
         webClient =
                 WebClient.builder()
