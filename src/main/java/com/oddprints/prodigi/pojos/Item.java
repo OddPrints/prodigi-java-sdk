@@ -14,18 +14,25 @@ public class Item {
     private String sizing = "fillPrintArea";
     private List<Asset> assets;
     private Map<String, String> attributes;
+    private String merchantReference;
 
     public static class Builder {
         private List<Asset> builderAssets;
         private String builderSku;
         private Map<String, String> builderAttributes = new HashMap<>();
         private int builderCopies;
+        private String builderMerchantReference;
 
         public Builder(String sku, int copies) {
+            this(sku, copies, null);
+        }
+
+        public Builder(String sku, int copies, String merchantReference) {
             this.builderAssets = new ArrayList<>();
             this.builderSku = sku;
             builderAttributes.put("finish", "lustre"); // default
             builderCopies = copies;
+            builderMerchantReference = merchantReference;
         }
 
         public Builder addAsset(URL url) {
@@ -40,6 +47,7 @@ public class Item {
             item.setSku(builderSku);
             item.setAttributes(builderAttributes);
             item.setCopies(builderCopies);
+            item.setMerchantReference(builderMerchantReference);
             return item;
         }
     }
@@ -52,6 +60,14 @@ public class Item {
 
     public void setSku(String sku) {
         this.sku = sku;
+    }
+
+    public String getMerchantReference() {
+        return merchantReference;
+    }
+
+    public void setMerchantReference(String merchantReference) {
+        this.merchantReference = merchantReference;
     }
 
     public int getCopies() {

@@ -42,6 +42,12 @@ public class Order {
             return this;
         }
 
+        public Builder addImage(URL url, String sku, int copies, String itemMerchantReference) {
+            Item item = new Item.Builder(sku, copies, itemMerchantReference).addAsset(url).build();
+            builderItems.add(item);
+            return this;
+        }
+
         public Builder merchantReference(String merchantReference) {
             builderMerchantReference = merchantReference;
             return this;
