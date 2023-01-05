@@ -23,12 +23,14 @@ public class Order {
     private List<Charge> charges;
     private List<Shipment> shipments;
     private String merchantReference;
+    private String idempotencyKey;
 
     public static class Builder {
         private List<Item> builderItems;
         private ShippingMethod builderShippingMethod;
         private Recipient builderRecipient;
         private String builderMerchantReference;
+        private String builderIdempotencyReference;
 
         public Builder(ShippingMethod shippingMethod, Recipient recipient) {
             builderItems = new ArrayList<>();
@@ -53,12 +55,18 @@ public class Order {
             return this;
         }
 
+        public Builder idempotencyReference(String idempotencyReference) {
+            builderIdempotencyReference = idempotencyReference;
+            return this;
+        }
+
         public Order build() {
             Order order = new Order();
             order.setItems(builderItems);
             order.setShippingMethod(builderShippingMethod);
             order.setRecipient(builderRecipient);
             order.setMerchantReference(builderMerchantReference);
+            order.setIdempotencyKey(builderIdempotencyReference);
             return order;
         }
     }
@@ -104,6 +112,14 @@ public class Order {
 
     public void setMerchantReference(String merchantReference) {
         this.merchantReference = merchantReference;
+    }
+
+    public String getIdempotencyKey() {
+        return idempotencyKey;
+    }
+
+    public void setIdempotencyKey(String idempotencyKey) {
+        this.idempotencyKey = idempotencyKey;
     }
 
     @JsonIgnore // don't serialise...
