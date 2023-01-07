@@ -36,6 +36,7 @@ public class Status {
     }
 
     public enum Stage {
+        Draft,
         InProgress,
         Complete,
         Cancelled
