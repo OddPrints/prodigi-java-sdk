@@ -1,7 +1,6 @@
 package com.oddprints.prodigi.pojos;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
