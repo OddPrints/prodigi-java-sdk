@@ -1,6 +1,8 @@
 package com.oddprints.prodigi.pojos;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,6 +11,7 @@ import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Item {
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String id;
 
     private String sku = "GLOBAL-PHO-4x6";
