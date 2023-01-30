@@ -4,8 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ChargeItem {
+
+    public enum Type {
+        Item, Shipping
+    }
+
     private String id;
     private String description;
+    private Type type;
     private String itemSku;
     private String shipmentId;
     private String itemId;
@@ -28,6 +34,14 @@ public class ChargeItem {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
     }
 
     public String getItemSku() {
