@@ -6,7 +6,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class ChargeItem {
 
     public enum Type {
-        Item, Shipping
+        Item,
+        Shipping
     }
 
     private String id;
