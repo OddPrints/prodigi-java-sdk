@@ -11,6 +11,7 @@ public class Charge {
 
     private String prodigiInvoiceNumber;
     private Cost totalCost;
+    private Cost totalTax;
     private List<ChargeItem> items;
 
     private Charge() {}
@@ -37,6 +38,14 @@ public class Charge {
 
     public void setTotalCost(Cost totalCost) {
         this.totalCost = totalCost;
+    }
+
+    public Cost getTotalTax() {
+        return totalTax;
+    }
+
+    public void setTotalTax(Cost totalTax) {
+        this.totalTax = totalTax;
     }
 
     public List<ChargeItem> getItems() {
