@@ -9,7 +9,7 @@ public class Address {
     private String line1;
     private String line2;
     private String postalOrZipCode;
-    private CountryCode countryCode;
+    private String countryCode;
     private String townOrCity;
     private String stateOrCounty;
 
@@ -23,7 +23,7 @@ public class Address {
         setLine1(line1);
         setLine2(line2);
         setPostalOrZipCode(postalOrZipCode);
-        setCountryCode(countryCode);
+        setCountryCode(countryCode.name());
         setTownOrCity(townOrCity);
         setStateOrCounty(stateOrCounty);
     }
@@ -55,10 +55,14 @@ public class Address {
     }
 
     public CountryCode getCountryCode() {
-        return countryCode;
+        return CountryCode.valueOf(countryCode.toUpperCase());
     }
 
     public void setCountryCode(CountryCode countryCode) {
+        this.countryCode = countryCode.name();
+    }
+
+    public void setCountryCode(String countryCode) {
         this.countryCode = countryCode;
     }
 
